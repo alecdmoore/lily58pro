@@ -2,8 +2,8 @@
  * Lily58 Pro — alec's keymap (stock layout + tweaks)
  *
  *   0 default
- *   1 lower   (hold left inner thumb)
- *   2 raise   (hold right inner thumb)
+ *   1 lower   (hold left inner thumb;  quick TAP = right Cmd  -> quadclick overlay)
+ *   2 raise   (hold right inner thumb; quick TAP = right Ctrl -> quadclick free-mouse)
  *   3 super   (hold lower + raise together)  -> media / brightness / volume
  *
  * SPDX-License-Identifier: MIT
@@ -23,6 +23,27 @@
         };
     };
 
+    behaviors {
+        // Thumb layer-tap: HOLD = the layer (as before), TAP = emit a right-hand
+        // modifier so a host-side listener (quadclick, ~/quadclick) can see the
+        // tap — &mo sends nothing to the host, so a bare layer key is invisible.
+        //   LOWER tap -> RGUI  (right Cmd)  -> quadclick overlay
+        //   RAISE tap -> RCTRL (right Ctrl) -> quadclick free-mouse
+        // hold-preferred: any other key pressed while the thumb is down resolves
+        //   to HOLD instantly, so normal layer use never misfires a tap.
+        // require-prior-idle-ms: pressed mid-typing-burst -> forced HOLD, so fast
+        //   rolls don't pop the overlay. Tap resolves under 200ms (< quadclick's
+        //   0.30s TAP_WINDOW). Both thumbs held still -> conditional Super layer.
+        lt_thumb: layer_tap_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            require-prior-idle-ms = <125>;
+            bindings = <&mo>, <&kp>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -37,7 +58,7 @@
 &kp TAB   &kp Q  &kp W  &kp E    &kp R    &kp T                      &kp Y  &kp U    &kp I     &kp O   &kp P    &kp MINUS
 &kp LCTRL &kp A  &kp S  &kp D    &kp F    &kp G                      &kp H  &kp J    &kp K     &kp L   &kp SEMI &kp SQT
 &kp LSHFT &kp Z  &kp X  &kp C    &kp V    &kp B  &kp LBKT   &kp RBKT &kp N  &kp M    &kp COMMA &kp DOT &kp FSLH &kp RSHFT
-                        &kp LALT &kp LGUI &mo 1  &kp SPACE  &kp RET  &mo 2  &kp BSPC &kp GLOBE
+                        &kp LALT &kp LGUI &lt_thumb 1 RGUI  &kp SPACE  &kp RET  &lt_thumb 2 RCTRL  &kp BSPC &kp GLOBE
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
