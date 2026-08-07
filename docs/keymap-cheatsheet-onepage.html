@@ -151,9 +151,12 @@
   <div class="grid" id="grid"></div>
 
   <div class="foot">
-    <div><b>Thumbs</b> ⌃ · ⌥ · ⌫/⌘ · ␣/Nav, mirrored. On Nav the same thumbs keep the modifier and change only the tap — Esc, Tab, Del.</div>
+    <div><b>Thumbs</b> ⌃ · ⌥ · ⌫/⌘ · ␣/Nav, mirrored. Plain Option, not a mod-tap — its old Enter tap kept firing by accident. Enter lives on both home-row pinkies.</div>
+    <div><b>Esc</b> taps Esc, holds <b>HYPER</b> (⌃⌥⇧⌘) — reserved for quadclick. Timing is balanced, so vim's <code>&lt;Esc&gt;j</code> still types a j.</div>
     <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold ⇧, tap ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right.</div>
-    <div><b>Inner keys</b> ⌘␣ Spotlight on Base · ⌘⇧C Maccy on Nav · ⌘⌃⇧3 screen-to-clipboard on Fn. ⌃ ⌥ ⌘ are on the thumbs, so HRM is optional.</div>
+    <div><b>Nav left hand</b> AeroSpace workspaces, in their old Raise-layer spots — A/S/D/F = ⌥4/⌥3/⌥2/⌥1, Z/X/C/V = ⌥7/⌥8/⌥9/⌥0.</div>
+    <div><b>Brackets</b> moved up a row, under the ⌘-bracket family, when AeroSpace took Z/X/C/V. They are the only plain <code>[ ] { }</code> on the board.</div>
+    <div><b>Inner keys</b> ⌘␣ Spotlight on Base · ⌘⇧C Maccy on Nav · ⌘⌃⇧3 screen-to-clipboard on Fn. ⌃ ⌥ ⌘ are on the thumbs, so HRM stays optional.</div>
   </div>
 </div>
 
@@ -182,7 +185,7 @@
       lInner: K("Spot","⌘␣",CHG), rInner: K("Spot","⌘␣",CHG)
     },
     {
-      accent: "raise", badge: "Nav · 2", title: "Nav, media & symbols",
+      accent: "raise", badge: "Nav · 2", title: "Nav, media & workspaces",
       how: "Hold Space (thumb) or Enter (pinky).",
       left:  [["~","⌘[","⌘]","⌘{","⌘}","Home"],
               ["`","[","]","{","}","PgUp"],
