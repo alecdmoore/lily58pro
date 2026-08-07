@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lily58 Pro — Layer Cheat-Sheet</title>
+<style>
+  :root {
+    --bg: #e9edf1; --panel: #ffffff; --ink: #1b222a; --muted: #5c6875;
+    --hair: #d3dae1; --ghost: #b6c0ca; --cap-top: #ffffff; --cap-bot: #eef1f4; --cap-edge: #c7cfd8;
+    --review: #c26a1a; --new: #0d8a86;
+    --hrm: #c2255c;   --hrm-soft: #fde8ef;
+    --base: #3a4652;  --base-soft: #e5e9ee;
+    --lower: #c26a1a; --lower-soft: #fbeada;
+    --raise: #3b5bdb; --raise-soft: #e6ebfb;
+    --super: #0d8a86; --super-soft: #d9f0ef;
+    --shift: #7c3aed; --shift-soft: #efe7fd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+      --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d;
+      --review: #e79a4e; --new: #3fb8b2;
+      --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+      --base: #aab6c2; --base-soft: #2c353f;
+      --lower: #e79a4e; --lower-soft: #3a2c1b;
+      --raise: #7aa2ff; --raise-soft: #1e2740;
+      --super: #3fb8b2; --super-soft: #163330;
+      --shift: #b998ff; --shift-soft: #241d3a;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #e9edf1; --panel: #ffffff; --ink: #1b222a; --muted: #5c6875;
+    --hair: #d3dae1; --ghost: #b6c0ca; --cap-top: #ffffff; --cap-bot: #eef1f4; --cap-edge: #c7cfd8; --review: #c26a1a; --new: #0d8a86;
+    --hrm: #c2255c; --hrm-soft: #fde8ef;
+    --base: #3a4652; --base-soft: #e5e9ee; --lower: #c26a1a; --lower-soft: #fbeada;
+    --raise: #3b5bdb; --raise-soft: #e6ebfb; --super: #0d8a86; --super-soft: #d9f0ef;
+    --shift: #7c3aed; --shift-soft: #efe7fd;
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+    --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d; --review: #e79a4e; --new: #3fb8b2;
+    --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+    --base: #aab6c2; --base-soft: #2c353f; --lower: #e79a4e; --lower-soft: #3a2c1b;
+    --raise: #7aa2ff; --raise-soft: #1e2740; --super: #3fb8b2; --super-soft: #163330;
+    --shift: #b998ff; --shift-soft: #241d3a;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 28px 64px; }
+
+  header.mast { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 8px; }
+  .mast h1 { font-size: clamp(26px, 4vw, 40px); margin: 0; letter-spacing: -0.02em; font-weight: 800; text-wrap: balance; }
+  .mast .sub { color: var(--muted); font-size: 14px; margin-top: 4px; max-width: 62ch; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .printbtn { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 8px 14px; cursor: pointer; white-space: nowrap; }
+  .printbtn:hover { border-color: var(--muted); }
+  .printbtn:focus-visible { outline: 2px solid var(--raise); outline-offset: 2px; }
+
+  .legend { display: flex; gap: 22px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin: 18px 0 26px; }
+  .legend b { color: var(--ink); font-weight: 700; }
+  .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+  .dot-new { display:inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--new); vertical-align: 0; margin-right: 6px; }
+
+  .banner { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--review); border-left-width: 4px; background: color-mix(in srgb, var(--review) 8%, var(--panel)); border-radius: 10px; padding: 14px 16px; margin: 8px 0 26px; font-size: 13.5px; }
+  .banner b { color: var(--review); }
+  .section-head { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 800; color: var(--muted); margin: 34px 0 14px; padding-top: 20px; border-top: 1px dashed var(--hair); }
+
+  .layer { background: var(--panel); border: 1px solid var(--hair); border-radius: 14px; padding: 22px 22px 26px; margin-bottom: 22px; page-break-inside: avoid; }
+  .layer__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .badge { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; padding: 4px 10px; border-radius: 6px; background: var(--accent); }
+  @media (prefers-color-scheme: dark) { .badge { color: #12171c; } }
+  :root[data-theme="dark"] .badge { color: #12171c; }
+  :root[data-theme="light"] .badge { color: #fff; }
+  .layer__title { font-size: 18px; font-weight: 700; }
+  .layer__how { color: var(--muted); font-size: 13.5px; }
+
+  .board { display: flex; justify-content: center; gap: 46px; flex-wrap: wrap; }
+  .half { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .rows { display: flex; gap: 6px; }
+  .col { display: flex; flex-direction: column; gap: 6px; }
+  .thumbs { display: flex; align-items: flex-end; gap: 6px; }
+  .half--left .thumbs { padding-left: 96px; }
+  .half--right .thumbs { padding-right: 96px; }
+
+  .cap { width: 44px; height: 44px; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; line-height: 1.02; background: linear-gradient(180deg, var(--cap-top), var(--cap-bot)); border: 1px solid var(--cap-edge); color: var(--ink); box-shadow: 0 1px 0 var(--cap-edge), 0 1.5px 2.5px rgba(0,0,0,0.06); padding: 2px; overflow: hidden; position: relative; }
+  .cap .s { font-size: 8px; font-weight: 700; color: var(--muted); letter-spacing: 0.02em; margin-top: 2px; text-transform: uppercase; }
+  .cap.small { font-size: 10.5px; font-weight: 700; }
+  .cap.tiny { font-size: 9px; font-weight: 700; }
+  .cap.wide { width: 56px; }
+  .cap.act { background: var(--accent-soft); border-color: var(--accent); }
+  .cap.act .s { color: var(--accent); }
+  .cap.k-fn { background: var(--super-soft); border-color: var(--super); font-weight: 800; }
+  .cap.sk { background: var(--shift-soft); border-color: var(--shift); }
+  .cap.sk .s { color: var(--shift); }
+  .cap.hrm { background: var(--hrm-soft); border-color: var(--hrm); }
+  .cap.hrm .s { color: var(--hrm); font-size: 10px; text-transform: none; margin-top: 1px; }
+  .cap.k-nav { background: var(--raise-soft); border-color: var(--raise); }
+  .cap.k-nav .s { color: var(--raise); }
+  .cap.k-lay2 { background: var(--shift-soft); border-color: var(--shift); }
+  .cap.k-lay2 .s { color: var(--shift); }
+  .cap.ghost { background: transparent; border: 1px dashed var(--ghost); box-shadow: none; color: var(--ghost); font-weight: 700; }
+  .cap.chg::before { content: ""; position: absolute; top: 3px; right: 3px; width: 7px; height: 7px; border-radius: 50%; background: var(--new); }
+  .cap.home::after { content: ""; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 12px; height: 2.5px; border-radius: 2px; background: var(--muted); }
+
+  .footnote { color: var(--muted); font-size: 12.5px; margin-top: 26px; }
+  .footnote b { color: var(--ink); }
+
+  .hrm-panel { background: var(--panel); border: 1px solid var(--hair); border-left: 4px solid var(--hrm); border-radius: 14px; padding: 22px 24px 24px; margin-bottom: 22px; page-break-inside: avoid; }
+  .hrm-lede { font-size: 13.5px; color: var(--muted); margin: 0 0 18px; max-width: 78ch; }
+  .hrm-lede b { color: var(--ink); }
+  .hrm-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+  .hrm-table th { text-align: left; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 12px 8px 0; border-bottom: 1px solid var(--hair); }
+  .hrm-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--hair); vertical-align: baseline; }
+  .hrm-table tr:last-child td { border-bottom: 0; }
+  .hrm-table .kc { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-weight: 800; font-size: 14px; }
+  .hrm-table .md { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-weight: 800; color: var(--hrm); white-space: nowrap; }
+  .hrm-table .note { color: var(--muted); font-size: 12px; }
+  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .rule { border: 1px solid var(--hair); border-radius: 10px; padding: 13px 15px; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+  .rule b { display: block; color: var(--ink); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .rule code, .hrm-lede code, .footnote code { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; color: var(--ink); }
+
+  @media print {
+    @page { size: landscape; margin: 12mm; }
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    .printbtn { display: none; }
+    .layer { border-color: #ccc; box-shadow: none; }
+    .banner { break-inside: avoid; }
+  }
+  @media (max-width: 520px) {
+    .cap { width: 36px; height: 36px; font-size: 11px; }
+    .cap.wide { width: 46px; }
+    .half--left .thumbs { padding-left: 40px; }
+    .half--right .thumbs { padding-right: 40px; }
+    .board { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">nice!nano · ZMK · split wireless</div>
+      <h1>Lily58 Pro — Layer Map</h1>
+      <div class="sub">Adapted from the jwoolson <b>v14</b> layout for the Lily58 Pro / Beekeeb Allium58 GLP, with the Windows-only keys swapped for macOS equivalents. Modifiers live on the thumbs; two hold-layers reached from the pinkies and thumbs; home row mods available as an opt-in overlay.</div>
+    </div>
+    <button class="printbtn" onclick="window.print()">Print / Save PDF</button>
+  </header>
+
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--raise)"></span><b>NAV</b> hold Space or Enter</span>
+    <span><span class="swatch" style="background:var(--shift)"></span><b>FN</b> hold Tab or −</span>
+    <span><span class="swatch" style="background:var(--hrm)"></span><b>HRM</b> toggled, off by default</span>
+    <span><span class="dot-new"></span>changed from the v14 sheet</span>
+    <span><span class="swatch" style="background:var(--ghost)"></span>dashed = pass-through</span>
+    <span>two labels on a cap = <b>tap</b> over <b>hold</b></span>
+  </div>
+
+  <div class="banner">
+    <div>🛠️</div>
+    <div><b>Not built yet — push to build, then flash both halves.</b> This is a full replacement for the old Lower / Raise / Super scheme. Green dots mark where it departs from the v14 sheet: <b>Spotlight</b> (⌘␣) on the inner keys instead of Alfred, <b>Maccy</b> (⌃⇧C) instead of the macOS clipboard viewer, and <b>⌘⌃⇧4</b> instead of the Win11 clipboard. Snip Tool / Print Screen became their macOS counterparts, and the Bluetooth keys are carried over from the old keymap — the v14 sheet has none, and without them there is no way to switch or re-pair hosts. kanata also needs a daemon restart: it grabs every keyboard on the Mac, so <code>kanata.kbd</code> carries <code>macos-dev-names-exclude ("Lily58")</code>.</div>
+  </div>
+
+  <div class="section-head">Base — keycaps</div>
+  <div id="base"></div>
+
+  <div class="section-head">Home-row mods — opt-in overlay</div>
+  <div class="hrm-panel">
+    <p class="hrm-lede">
+      <b>Off by default.</b> Toggle it with the <b>H</b> key on the Fn layer (hold Tab, tap H) and it stays on until you toggle it back. While on, each home-row key becomes a <b>hold-tap</b>: a quick press still types the letter, holding it produces a modifier. Everything else on the board is unaffected. The mods are <b>mirrored across both hands</b> and only engage when chorded with a key on the <b>other</b> hand — so <code>⌘</code> is hold-<b>F</b> + tap <b>C</b>, while a same-hand roll like <code>fd</code> just types the letters. Both hands emit <b>left-side</b> mod codes, exactly as kanata does; only shift is sided.
+    </p>
+
+    <table class="hrm-table">
+      <thead>
+        <tr><th>Finger</th><th>Left</th><th>Right</th><th>Modifier</th><th>Hold</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Pinky</td>  <td class="kc">A</td><td class="kc">'</td><td class="md">⇧ Shift</td><td class="kc">240 ms</td><td class="note">Slower finger — measured p90 146 ms, max 205 ms over 603 keystrokes. Same 240 ms the laptop uses. On <code>'</code>, not <code>;</code> — this layout has no <code>;</code> on layer 0.</td></tr>
+        <tr><td>Ring</td>   <td class="kc">S</td><td class="kc">L</td><td class="md">⌃ Control</td><td class="kc">200 ms</td><td class="note"></td></tr>
+        <tr><td>Middle</td> <td class="kc">D</td><td class="kc">K</td><td class="md">⌥ Option</td><td class="kc">200 ms</td><td class="note"></td></tr>
+        <tr><td>Index</td>  <td class="kc">F</td><td class="kc">J</td><td class="md">⌘ Command</td><td class="kc">200 ms</td><td class="note"></td></tr>
+      </tbody>
+    </table>
+
+    <div class="rules">
+      <div class="rule">
+        <b>You may not need it</b>
+        ⌃ ⌥ ⌘ are already on the thumbs, always available and with no timing rules at all. The overlay is for when you would rather not move off the home row.
+      </div>
+      <div class="rule">
+        <b>Cross-hand only</b>
+        A hold only becomes a modifier if the key it is chorded with sits on the opposite hand, or on a thumb. Same-hand presses resolve to the letter, so fast rolls type normally.
+      </div>
+      <div class="rule">
+        <b>Thumbs count as either hand</b>
+        All eight thumb keys — plus the two inner Spotlight keys — are neutral, so ⌘⌫, ⌘␣ and ⌘⏎ work from either side.
+      </div>
+      <div class="rule">
+        <b>Mods stack</b>
+        Hold F <i>and</i> D, then tap J for ⌘⌥J. The positional check is deferred to release, so a second mod can pile onto the first.
+      </div>
+      <div class="rule">
+        <b>Same-hand escape hatch</b>
+        <code>^A ^C ^D ^E ^R ^W ^Z</code> are all left-hand letters, so hold-S can never reach them. Use the <b>⌃</b> thumb key instead — thumbs are exempt from the cross-hand rule.
+      </div>
+      <div class="rule">
+        <b>Typing-burst guard</b>
+        Pressed within ~125 ms of the previous key (100 ms for the shifts), a mod is forced to its letter. Stops rolls from firing modifiers; pause a beat before a chord.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">Shift — held modifier</div>
+  <div id="shift"></div>
+
+  <div class="section-head">Hold-layers</div>
+  <div id="layers"></div>
+
+  <p class="footnote">
+    <b>Thumbs</b> read <b>⌃ ⏎/⌥ ⌫/⌘ ␣/Nav</b> │ <b>␣/Nav ⌫/⌘ ⏎/⌥ ⌃</b>, mirrored. The two inner mod-taps type Enter and Backspace on a tap and hold Option and Command; the ⌃ keys are plain Control. On the Nav layer the same three thumbs keep their modifier and change only the tap — <b>Esc, Tab, Del</b>.
+    <b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps rather than plain shortcuts: <b>hold</b> = Shift, <b>tap</b> = ⌃B on the left (herdr prefix) and ⌃⌘⌥ on the right (Wispr Flow hands-free). On Nav they become Caps Lock on tap, Shift on hold.
+    <b>Inner keys</b> are Spotlight (⌘␣) on layer 0, Maccy (⌃⇧C) on Nav, and region-to-clipboard (⌘⌃⇧4) on Fn.
+    <b>Nav:</b> ⌘← / ⌘→ are line start and end — the v14 sheet has ⌥← / ⌥→ for word-wise movement here. Vertical nav sits in the outer column, Home / PgUp / PgDn / End top to bottom, on both halves. <b>Brightness</b> fills the last two free slots in the bottom-right, extending the media block down a row — Bri+ sits on the Enter/Nav key, so reach it by holding a Space thumb rather than the pinky.
+    <b>Fn:</b> F1–F15 on the left, numpad on the right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 and ⌘⇧3 are region and full-screen capture <i>to file</i>, where the v14 sheet has Snip Tool and Print Screen.
+    <b>Shift:</b> the standard US layout — number row → ! @ # $ % ^ &amp; * ( ) +, punctuation → _ " &lt; &gt; ?, letters uppercase.
+    <b>Still missing from the old keymap:</b> the AeroSpace ⌥-workspace shortcuts. Nothing in the v14 layout replaces them — there is room on the Fn layer's left hand if you want them back.
+  </p>
+</div>
+
+<script>
+  const G = null;
+  function K(t, s, cls) { return { t, s, cls }; }
+  const CHG = "chg"; // green-dot marker for changed keys
+  // Home-row mod: tap the letter, hold for the modifier shown beneath.
+  // `dot` adds the green "changed this round" marker.
+  const HM = (t, mod, dot) => K(t, mod, dot ? "hrm chg" : "hrm");
+
+  const NAVC = "k-nav";   // key that reaches the Nav layer
+  const FNC  = "k-lay2";  // key that reaches the Fn layer
+
+  // Layer 0. Caps showing two labels are tap-on-top / hold-underneath.
+  const base = {
+    accent: "base",
+    left:  [["ESC","1","2","3","4","5"],
+            [K("Tab","Fn",FNC),"Q","W","E","R","T"],
+            [K("Enter","Nav",NAVC),"A","S","D","F","G"],
+            [K("⌃B","⇧"),"Z","X","C","V","B"]],
+    right: [["6","7","8","9","0","="],
+            ["Y","U","I","O","P",K("−","Fn",FNC)],
+            ["H","J","K","L","'",K("Enter","Nav",NAVC)],
+            ["N","M",",",".","/",K("⌃⌘⌥","⇧")]],
+    lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
+    lInner: K("Spot","⌘␣",CHG), rInner: K("Spot","⌘␣",CHG)
+  };
+
+  // Held-Shift view of the base layer: number row + punctuation gain their
+  // shifted glyphs (base key shown small beneath); letters go uppercase.
+  const shift = {
+    accent: "shift", badge: "Shift", title: "Shifted symbols · uppercase",
+    how: "Hold either bottom-outer key — or, with the HRM layer on, the A / ' pinky.",
+    left:  [["ESC",K("!","1","sk"),K("@","2","sk"),K("#","3","sk"),K("$","4","sk"),K("%","5","sk")],
+            ["Tab","Q","W","E","R","T"],
+            ["Enter","A","S","D","F","G"],
+            [K("⌃B","⇧"),"Z","X","C","V","B"]],
+    right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
+            ["Y","U","I","O","P",K("_","−","sk")],
+            ["H","J","K","L",K("\"","'","sk"),"Enter"],
+            ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("⌃⌘⌥","⇧")]],
+    lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
+    lInner: K("Spot","⌘␣"), rInner: K("Spot","⌘␣")
+  };
+
+  const layers = [
+    {
+      accent: "hrm", badge: "HRM", title: "Home row mods — toggled, OFF by default",
+      how: "Toggle with the H key on the Fn layer.  Everything else falls through to layer 0.",
+      left:  [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("A","⇧"),K("S","⌃"),K("D","⌥"),K("F","⌘"),G],
+              [G,G,G,G,G,G]],
+      right: [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K("'","⇧"),G],
+              [G,G,G,G,G,G]],
+      lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
+    },
+    {
+      accent: "raise", badge: "Nav", title: "Navigation, media controls & symbols",
+      how: "Hold Space (either thumb) or Enter (either home-row pinky).",
+      left:  [["~","⌘[","⌘]","⌘{","⌘}","Home"],
+              ["`",G,"⌘←","↑","⌘→","PgUp"],
+              [G,G,"←","↓","→","PgDn"],
+              [K("Caps","⇧"),"[","]","{","}","End"]],
+      right: [["Home","Prev","Next",G,"Mute","Vol+"],
+              ["PgUp","⌘←","↑","⌘→","⏯","Vol−"],
+              ["PgDn","←","↓","→","Bri−","Bri+"],
+              ["End","|",";",":","\\",K("Caps","⇧")]],
+      lThumb: [K("Esc","⌃"),K("Tab","⌥"),K("Del","⌘"),G],
+      rThumb: [G,K("Del","⌘"),K("Tab","⌥"),K("Esc","⌃")],
+      lInner: K("Maccy","⌃⇧C",CHG), rInner: K("Maccy","⌃⇧C",CHG)
+    },
+    {
+      accent: "shift", badge: "Fn", title: "Numpad, F-keys, Bluetooth & screenshots",
+      how: "Hold Tab (left pinky) or − (right pinky).",
+      left:  [["BT0","F1","F2","F3","F4","F5"],
+              ["BT1","F6","F7","F8","F9","F10"],
+              ["BT2","F11","F12","F13","F14","F15"],
+              ["⇧","BT3","BT4","BT✕",K("⌘⇧4","region"),K("⌘⇧3","screen")]],
+      right: [[G,"7","8","9","+",G],
+              [G,"4","5","6","−",G],
+              [K("HRM","toggle","hrm"),"1","2","3","*",G],
+              [G,G,"0",".","/","⇧"]],
+      lThumb: ["⌃","⌥","⌘",G], rThumb: [G,"⌘","⌥","⌃"],
+      lInner: K("⌘⌃⇧4","clip",CHG), rInner: K("⌘⌃⇧4","clip",CHG)
+    }
+  ];
+
+  const stagLeft  = [9, 4, 0, 4, 11, 14];
+  const stagRight = [14, 11, 4, 0, 4, 9];
+
+  function cap(item, opts = {}) {
+    const d = document.createElement("div");
+    d.className = "cap";
+    if (item === null || item === undefined) { d.classList.add("ghost"); d.textContent = "·"; return d; }
+    const obj = (typeof item === "string") ? { t: item } : item;
+    const label = obj.t;
+    if (label.length >= 4) d.classList.add("tiny");
+    else if (label.length === 3) d.classList.add("small");
+    if (opts.wide) d.classList.add("wide");
+    if (opts.act) d.classList.add("act");
+    if (opts.home) d.classList.add("home");
+    if (obj.cls) obj.cls.split(" ").forEach(c => d.classList.add(c));
+    const main = document.createElement("div"); main.textContent = label; d.appendChild(main);
+    if (obj.s) { const s = document.createElement("div"); s.className = "s"; s.textContent = obj.s; d.appendChild(s); }
+    return d;
+  }
+
+  function buildHalf(side, data, isBase) {
+    const half = document.createElement("div");
+    half.className = "half half--" + side;
+    const rows = document.createElement("div"); rows.className = "rows";
+    const grid = side === "left" ? data.left : data.right;
+    const stag = side === "left" ? stagLeft : stagRight;
+    for (let c = 0; c < 6; c++) {
+      const col = document.createElement("div"); col.className = "col"; col.style.marginTop = stag[c] + "px";
+      for (let r = 0; r < 4; r++) {
+        const item = grid[r][c];
+        const isAct = !isBase && item !== null;
+        const lbl = (item && typeof item === "object") ? item.t : item;
+        const isHome = isBase && ((side === "left" && lbl === "F") || (side === "right" && lbl === "J"));
+        col.appendChild(cap(item, { act: isAct, home: isHome }));
+      }
+      rows.appendChild(col);
+    }
+    half.appendChild(rows);
+    const thumbs = document.createElement("div"); thumbs.className = "thumbs";
+    const tArr = side === "left" ? data.lThumb : data.rThumb;
+    const inner = side === "left" ? data.lInner : data.rInner;
+    const act = !isBase;
+    const innerCap = cap(inner, { act: act && inner !== null }); innerCap.style.marginBottom = "26px";
+    if (side === "left") { tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); thumbs.appendChild(innerCap); }
+    else { thumbs.appendChild(innerCap); tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); }
+    half.appendChild(thumbs);
+    return half;
+  }
+
+  function buildBoard(data, mountId, isBase, head) {
+    const mount = document.getElementById(mountId);
+    const card = document.createElement("section"); card.className = "layer";
+    card.style.setProperty("--accent", "var(--" + data.accent + ")");
+    card.style.setProperty("--accent-soft", "var(--" + data.accent + "-soft)");
+    if (head) card.appendChild(head);
+    const board = document.createElement("div"); board.className = "board";
+    board.appendChild(buildHalf("left", data, isBase));
+    board.appendChild(buildHalf("right", data, isBase));
+    card.appendChild(board); mount.appendChild(card);
+  }
+
+  buildBoard(base, "base", true, null);
+
+  const shiftHead = document.createElement("div"); shiftHead.className = "layer__head";
+  shiftHead.innerHTML = '<span class="badge">' + shift.badge + '</span>' +
+    '<span class="layer__title">' + shift.title + '</span>' +
+    '<span class="layer__how">' + shift.how + '</span>';
+  buildBoard(shift, "shift", true, shiftHead);
+
+  layers.forEach(data => {
+    const head = document.createElement("div"); head.className = "layer__head";
+    head.innerHTML = '<span class="badge">' + data.badge + '</span>' +
+      '<span class="layer__title">' + data.title + '</span>' +
+      '<span class="layer__how">' + data.how + '</span>';
+    buildBoard(data, "layers", false, head);
+  });
+</script>
+
+</body>
+</html>

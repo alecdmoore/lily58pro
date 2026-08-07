@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lily58 Pro — Cheat-Sheet (Print)</title>
+<style>
+  :root {
+    --bg: #e9edf1; --panel: #ffffff; --ink: #1b222a; --muted: #5c6875;
+    --hair: #d3dae1; --ghost: #b6c0ca; --cap-top: #ffffff; --cap-bot: #eef1f4; --cap-edge: #c7cfd8;
+    --new: #0d8a86;
+    --hrm: #c2255c;   --hrm-soft: #fde8ef;
+    --base: #3a4652;  --base-soft: #e5e9ee;
+    --lower: #c26a1a; --lower-soft: #fbeada;
+    --raise: #3b5bdb; --raise-soft: #e6ebfb;
+    --super: #0d8a86; --super-soft: #d9f0ef;
+    --shift: #7c3aed; --shift-soft: #efe7fd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+      --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d;
+      --new: #3fb8b2;
+      --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+      --base: #aab6c2; --base-soft: #2c353f;
+      --lower: #e79a4e; --lower-soft: #3a2c1b;
+      --raise: #7aa2ff; --raise-soft: #1e2740;
+      --super: #3fb8b2; --super-soft: #163330;
+      --shift: #b998ff; --shift-soft: #241d3a;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #e9edf1; --panel: #ffffff; --ink: #1b222a; --muted: #5c6875;
+    --hair: #d3dae1; --ghost: #b6c0ca; --cap-top: #ffffff; --cap-bot: #eef1f4; --cap-edge: #c7cfd8; --new: #0d8a86;
+    --hrm: #c2255c; --hrm-soft: #fde8ef;
+    --base: #3a4652; --base-soft: #e5e9ee; --lower: #c26a1a; --lower-soft: #fbeada;
+    --raise: #3b5bdb; --raise-soft: #e6ebfb; --super: #0d8a86; --super-soft: #d9f0ef;
+    --shift: #7c3aed; --shift-soft: #efe7fd;
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+    --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d; --new: #3fb8b2;
+    --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+    --base: #aab6c2; --base-soft: #2c353f; --lower: #e79a4e; --lower-soft: #3a2c1b;
+    --raise: #7aa2ff; --raise-soft: #1e2740; --super: #3fb8b2; --super-soft: #163330;
+    --shift: #b998ff; --shift-soft: #241d3a;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 22px 40px; }
+
+  header.mast { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 12px; }
+  .mast h1 { font-size: 22px; margin: 0; letter-spacing: -0.02em; font-weight: 800; }
+  .mast .eyebrow { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .mast .sub { color: var(--muted); font-size: 11.5px; }
+  .printbtn { font: inherit; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+  .printbtn:hover { border-color: var(--muted); }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); margin: 0 0 14px; align-items: center; }
+  .legend b { color: var(--ink); font-weight: 700; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; }
+  .dot-new { display:inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--new); vertical-align: 0; margin-right: 5px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .layer { background: var(--panel); border: 1px solid var(--hair); border-radius: 12px; padding: 12px 14px 14px; page-break-inside: avoid; }
+  .layer__head { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 10px; }
+  .badge { font-size: 10.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; padding: 3px 8px; border-radius: 5px; background: var(--accent); }
+  @media (prefers-color-scheme: dark) { .badge { color: #12171c; } }
+  :root[data-theme="dark"] .badge { color: #12171c; }
+  :root[data-theme="light"] .badge { color: #fff; }
+  .layer__title { font-size: 13px; font-weight: 700; }
+  .layer__how { color: var(--muted); font-size: 11px; }
+
+  .board { display: flex; justify-content: center; gap: 22px; }
+  .half { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .rows { display: flex; gap: 4px; }
+  .col { display: flex; flex-direction: column; gap: 4px; }
+  .thumbs { display: flex; align-items: flex-end; gap: 4px; }
+  .half--left .thumbs { padding-left: 44px; }
+  .half--right .thumbs { padding-right: 44px; }
+
+  .cap { width: 28px; height: 28px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 10px; font-weight: 600; line-height: 1.02; background: linear-gradient(180deg, var(--cap-top), var(--cap-bot)); border: 1px solid var(--cap-edge); color: var(--ink); box-shadow: 0 1px 0 var(--cap-edge); padding: 1px; overflow: hidden; position: relative; }
+  .cap .s { font-size: 6px; font-weight: 700; color: var(--muted); letter-spacing: 0.01em; margin-top: 1px; text-transform: uppercase; }
+  .cap.small { font-size: 8.5px; font-weight: 700; }
+  .cap.tiny { font-size: 7px; font-weight: 700; }
+  .cap.wide { width: 36px; }
+  .cap.act { background: var(--accent-soft); border-color: var(--accent); }
+  .cap.act .s { color: var(--accent); }
+  .cap.k-fn { background: var(--super-soft); border-color: var(--super); font-weight: 800; }
+  .cap.sk { background: var(--shift-soft); border-color: var(--shift); }
+  .cap.sk .s { color: var(--shift); }
+  .cap.hrm { background: var(--hrm-soft); border-color: var(--hrm); }
+  .cap.hrm .s { color: var(--hrm); font-size: 8.5px; text-transform: none; margin-top: 0; }
+  .cap.k-nav { background: var(--raise-soft); border-color: var(--raise); }
+  .cap.k-nav .s { color: var(--raise); }
+  .cap.k-lay2 { background: var(--shift-soft); border-color: var(--shift); }
+  .cap.k-lay2 .s { color: var(--shift); }
+  .cap.ghost { background: transparent; border: 1px dashed var(--ghost); box-shadow: none; color: var(--ghost); font-weight: 700; }
+  .cap.chg::before { content: ""; position: absolute; top: 2px; right: 2px; width: 5px; height: 5px; border-radius: 50%; background: var(--new); }
+  .cap.home::after { content: ""; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 9px; height: 2px; border-radius: 2px; background: var(--muted); }
+
+  .notes { margin-top: 14px; border-top: 1px dashed var(--hair); padding-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.5; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 18px; }
+  .notes b { color: var(--ink); }
+
+  .hrm-band { border: 1px solid var(--hair); border-left: 4px solid var(--hrm); border-radius: 10px; background: var(--panel); padding: 10px 14px; margin-bottom: 14px; page-break-inside: avoid; display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: center; }
+  .hrm-band .fingers { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; }
+  .hrm-band .fingers span { white-space: nowrap; }
+  .hrm-band .kc { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-weight: 800; }
+  .hrm-band .md { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-weight: 800; color: var(--hrm); }
+  .hrm-band .tag { font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 800; color: var(--hrm); white-space: nowrap; }
+  .hrm-band .why { grid-column: 2; color: var(--muted); font-size: 10.5px; line-height: 1.45; }
+  .hrm-band code { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; color: var(--ink); }
+
+  @media print {
+    @page { size: landscape; margin: 9mm; }
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    .printbtn { display: none; }
+    .layer { border-color: #ccc; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">nice!nano · ZMK · split wireless</div>
+      <h1>Lily58 Pro — Layer Cheat-Sheet</h1>
+    </div>
+    <div class="sub">jwoolson v14 layout, macOS-ified · mods on the thumbs · Nav + Fn hold-layers · opt-in home-row mods</div>
+    <button class="printbtn" onclick="window.print()">Print / Save PDF</button>
+  </header>
+
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--base)"></span><b>BASE</b> default</span>
+    <span><span class="swatch" style="background:var(--raise)"></span><b>NAV</b> hold Space or Enter</span>
+    <span><span class="swatch" style="background:var(--shift)"></span><b>FN</b> hold Tab or −</span>
+    <span><span class="swatch" style="background:var(--hrm)"></span><b>HRM</b> toggled, off by default</span>
+    <span><span class="dot-new"></span>changed from the v14 sheet</span>
+    <span><span class="swatch" style="background:var(--ghost)"></span>dashed = pass-through</span>
+    <span>two labels = <b>tap</b> over <b>hold</b></span>
+  </div>
+
+  <div class="hrm-band">
+    <div class="tag">Home-row mods · OFF by default</div>
+    <div class="fingers">
+      <span><b class="kc">A</b> / <b class="kc">'</b> → <b class="md">⇧</b> <i>240ms</i></span>
+      <span><b class="kc">S</b> / <b class="kc">L</b> → <b class="md">⌃</b></span>
+      <span><b class="kc">D</b> / <b class="kc">K</b> → <b class="md">⌥</b></span>
+      <span><b class="kc">F</b> / <b class="kc">J</b> → <b class="md">⌘</b></span>
+      <span>toggle: <b class="kc">H</b> on the Fn layer</span>
+    </div>
+    <div class="why">
+      An opt-in overlay — ⌃ ⌥ ⌘ are already on the thumbs. While on: tap the letter, hold for the modifier. Mirrored on both hands, both emitting <b>left-side</b> mod codes, as kanata does on the laptop. A hold only becomes a modifier when chorded with the <b>other</b> hand or a thumb — same-hand rolls just type. Thumbs and the two inner Spotlight keys are neutral, so ⌘⌫ / ⌘␣ / ⌘⏎ work from either side. Mods stack (hold F + D, tap J = ⌘⌥J). Pressed inside a typing burst (~125ms, 100ms for shifts) a mod is forced to its letter; tap-then-hold within 200ms auto-repeats the letter. For same-hand ctrl chords — <code>^A ^C ^D ^E ^R ^W ^Z</code> are all left-hand — use the <b>⌃</b> thumb key.
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="notes">
+    <div><b>Thumbs:</b> ⌃ ⏎/⌥ ⌫/⌘ ␣/Nav, mirrored. Inner two are mod-taps — tap types Enter / Backspace, hold gives ⌥ / ⌘. On Nav the same thumbs keep the modifier and change the tap to Esc / Tab / Del.</div>
+    <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold = Shift, tap = ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right. On Nav they tap Caps Lock.</div>
+    <div><b>Inner keys:</b> Spotlight ⌘␣ on base, Maccy ⌃⇧C on Nav, ⌘⌃⇧4 region-to-clipboard on Fn.</div>
+    <div><b>Nav:</b> ⌘← / ⌘→ are line start / end (v14 has ⌥ word-wise). Home / PgUp / PgDn / End run down the outer column on both halves. Brightness fills the bottom-right pair.</div>
+    <div><b>Fn:</b> F1–F15 left, numpad right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 / ⌘⇧3 capture to file, replacing v14's Snip Tool / Print Screen.</div>
+    <div><b>Shift:</b> number row → ! @ # $ % ^ &amp; * ( ) +; punctuation → _ " &lt; &gt; ?; letters uppercase.</div>
+    <div><b>Still missing:</b> the AeroSpace ⌥-workspace shortcuts — nothing in v14 replaces them.</div>
+  </div>
+</div>
+
+<script>
+  const G = null;
+  function K(t, s, cls) { return { t, s, cls }; }
+  const CHG = "chg"; // green-dot marker for changed keys
+
+  const NAVC = "k-nav";   // key that reaches the Nav layer
+  const FNC  = "k-lay2";  // key that reaches the Fn layer
+
+  // Layer 0. Caps showing two labels are tap-on-top / hold-underneath.
+  const base = {
+    accent: "base", badge: "Base", title: "Alpha-numerics & symbols", how: "Default layer.",
+    left:  [["ESC","1","2","3","4","5"],
+            [K("Tab","Fn",FNC),"Q","W","E","R","T"],
+            [K("Ent","Nav",NAVC),"A","S","D","F","G"],
+            [K("^B","\u21e7"),"Z","X","C","V","B"]],
+    right: [["6","7","8","9","0","="],
+            ["Y","U","I","O","P",K("\u2212","Fn",FNC)],
+            ["H","J","K","L","'",K("Ent","Nav",NAVC)],
+            ["N","M",",",".","/",K("\u2303\u2318\u2325","\u21e7")]],
+    lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
+    lInner: K("Spot","\u2318\u2423",CHG), rInner: K("Spot","\u2318\u2423",CHG), isBase: true
+  };
+
+  // Held-Shift view of the base layer: number row + punctuation gain their
+  // shifted glyphs (base key shown small beneath); letters go uppercase.
+  const shift = {
+    accent: "shift", badge: "Shift", title: "Shifted symbols \u00b7 uppercase",
+    how: "Hold either bottom-outer key.",
+    left:  [["ESC",K("!","1","sk"),K("@","2","sk"),K("#","3","sk"),K("$","4","sk"),K("%","5","sk")],
+            ["Tab","Q","W","E","R","T"],
+            ["Ent","A","S","D","F","G"],
+            [K("^B","\u21e7"),"Z","X","C","V","B"]],
+    right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
+            ["Y","U","I","O","P",K("_","\u2212","sk")],
+            ["H","J","K","L",K("\"","'","sk"),"Ent"],
+            ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("\u2303\u2318\u2325","\u21e7")]],
+    lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
+    lInner: K("Spot","\u2318\u2423"), rInner: K("Spot","\u2318\u2423"), isBase: true
+  };
+
+  const layers = [
+    {
+      accent: "hrm", badge: "HRM", title: "Home row mods \u2014 toggled, OFF by default",
+      how: "Toggle: H key on the Fn layer.",
+      left:  [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("A","\u21e7"),K("S","\u2303"),K("D","\u2325"),K("F","\u2318"),G],
+              [G,G,G,G,G,G]],
+      right: [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("J","\u2318"),K("K","\u2325"),K("L","\u2303"),K("'","\u21e7"),G],
+              [G,G,G,G,G,G]],
+      lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
+    },
+    {
+      accent: "raise", badge: "Nav", title: "Navigation, media & symbols",
+      how: "Hold Space (thumb) or Enter (pinky).",
+      left:  [["~","\u2318[","\u2318]","\u2318{","\u2318}","Home"],
+              ["`",G,"\u2318\u2190","\u2191","\u2318\u2192","PgUp"],
+              [G,G,"\u2190","\u2193","\u2192","PgDn"],
+              [K("Caps","\u21e7"),"[","]","{","}","End"]],
+      right: [["Home","Prev","Next",G,"Mute","Vol+"],
+              ["PgUp","\u2318\u2190","\u2191","\u2318\u2192","\u23ef","Vol\u2212"],
+              ["PgDn","\u2190","\u2193","\u2192","Bri\u2212","Bri+"],
+              ["End","|",";",":","\\",K("Caps","\u21e7")]],
+      lThumb: [K("Esc","\u2303"),K("Tab","\u2325"),K("Del","\u2318"),G],
+      rThumb: [G,K("Del","\u2318"),K("Tab","\u2325"),K("Esc","\u2303")],
+      lInner: K("Maccy","^\u21e7C",CHG), rInner: K("Maccy","^\u21e7C",CHG)
+    },
+    {
+      accent: "shift", badge: "Fn", title: "Numpad, F-keys, Bluetooth & screenshots",
+      how: "Hold Tab (left pinky) or \u2212 (right pinky).",
+      left:  [["BT0","F1","F2","F3","F4","F5"],
+              ["BT1","F6","F7","F8","F9","F10"],
+              ["BT2","F11","F12","F13","F14","F15"],
+              ["\u21e7","BT3","BT4","BT\u2715",K("\u2318\u21e74","rgn"),K("\u2318\u21e73","scr")]],
+      right: [[G,"7","8","9","+",G],
+              [G,"4","5","6","\u2212",G],
+              [K("HRM","tog","hrm"),"1","2","3","*",G],
+              [G,G,"0",".","/","\u21e7"]],
+      lThumb: ["\u2303","\u2325","\u2318",G], rThumb: [G,"\u2318","\u2325","\u2303"],
+      lInner: K("\u2318^\u21e74","clip",CHG), rInner: K("\u2318^\u21e74","clip",CHG)
+    }
+  ];
+
+  const stagLeft  = [6, 3, 0, 3, 8, 10];
+  const stagRight = [10, 8, 3, 0, 3, 6];
+
+  function cap(item, opts = {}) {
+    const d = document.createElement("div");
+    d.className = "cap";
+    if (item === null || item === undefined) { d.classList.add("ghost"); d.textContent = "·"; return d; }
+    const obj = (typeof item === "string") ? { t: item } : item;
+    const label = obj.t;
+    if (label.length >= 4) d.classList.add("tiny");
+    else if (label.length === 3) d.classList.add("small");
+    if (opts.wide) d.classList.add("wide");
+    if (opts.act) d.classList.add("act");
+    if (opts.home) d.classList.add("home");
+    if (obj.cls) obj.cls.split(" ").forEach(c => d.classList.add(c));
+    const main = document.createElement("div"); main.textContent = label; d.appendChild(main);
+    if (obj.s) { const s = document.createElement("div"); s.className = "s"; s.textContent = obj.s; d.appendChild(s); }
+    return d;
+  }
+
+  function buildHalf(side, data, isBase) {
+    const half = document.createElement("div");
+    half.className = "half half--" + side;
+    const rows = document.createElement("div"); rows.className = "rows";
+    const grid = side === "left" ? data.left : data.right;
+    const stag = side === "left" ? stagLeft : stagRight;
+    for (let c = 0; c < 6; c++) {
+      const col = document.createElement("div"); col.className = "col"; col.style.marginTop = stag[c] + "px";
+      for (let r = 0; r < 4; r++) {
+        const item = grid[r][c];
+        const isAct = !isBase && item !== null;
+        const lbl = (item && typeof item === "object") ? item.t : item;
+        const isHome = isBase && ((side === "left" && lbl === "F") || (side === "right" && lbl === "J"));
+        col.appendChild(cap(item, { act: isAct, home: isHome }));
+      }
+      rows.appendChild(col);
+    }
+    half.appendChild(rows);
+    const thumbs = document.createElement("div"); thumbs.className = "thumbs";
+    const tArr = side === "left" ? data.lThumb : data.rThumb;
+    const inner = side === "left" ? data.lInner : data.rInner;
+    const act = !isBase;
+    const innerCap = cap(inner, { act: act && inner !== null }); innerCap.style.marginBottom = "18px";
+    if (side === "left") { tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); thumbs.appendChild(innerCap); }
+    else { thumbs.appendChild(innerCap); tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); }
+    half.appendChild(thumbs);
+    return half;
+  }
+
+  function buildBoard(data, mount) {
+    const card = document.createElement("section"); card.className = "layer";
+    card.style.setProperty("--accent", "var(--" + data.accent + ")");
+    card.style.setProperty("--accent-soft", "var(--" + data.accent + "-soft)");
+    const head = document.createElement("div"); head.className = "layer__head";
+    head.innerHTML = '<span class="badge">' + data.badge + '</span>' +
+      '<span class="layer__title">' + data.title + '</span>' +
+      '<span class="layer__how">' + data.how + '</span>';
+    card.appendChild(head);
+    const board = document.createElement("div"); board.className = "board";
+    board.appendChild(buildHalf("left", data, !!data.isBase));
+    board.appendChild(buildHalf("right", data, !!data.isBase));
+    card.appendChild(board); mount.appendChild(card);
+  }
+
+  const grid = document.getElementById("grid");
+  buildBoard(base, grid);
+  buildBoard(shift, grid);
+  layers.forEach(data => buildBoard(data, grid));
+</script>
+
+</body>
+</html>

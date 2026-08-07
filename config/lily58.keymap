@@ -1,10 +1,28 @@
 /*
- * Lily58 Pro — alec's keymap (stock layout + tweaks)
+ * Lily58 Pro — alec's keymap
  *
- *   0 default
- *   1 lower   (hold left inner thumb;  quick TAP = ENTER)
- *   2 raise   (hold right inner thumb; quick TAP = SPACE)
- *   3 super   (hold lower + raise together)  -> media / brightness / volume
+ * Adapted from the jwoolson "Lily58 Pro / Beekeeb Allium58 GLP" v14 layout,
+ * with the Windows-only keys swapped for macOS equivalents.
+ *
+ *   0 default  alpha-numerics & symbols
+ *   1 hrm      home row mods — TOGGLED, off by default (&tog 1 on layer 3)
+ *   2 nav      navigation, media controls & symbols   (v14 calls this "Layer 1")
+ *   3 fn       numpad, F-keys, BT, screenshots        (v14 calls this "Layer 2")
+ *
+ * LAYER ORDER IS LOAD-BEARING. ZMK resolves the highest ACTIVE layer first, so
+ * `hrm` must sit below `nav`/`fn`. At index 4 it would shadow nav's arrows on
+ * S / D / F whenever it was toggled on. Do not renumber without re-checking.
+ *
+ * Reaching the layers:
+ *   nav  — hold Space (either thumb) or Enter (either home-row pinky)
+ *   fn   — hold Tab (left pinky) or Dash (right pinky)
+ *
+ * Modifiers live on the thumbs: ⌃ outer, then Enter/⌥ and Bksp/⌘ as mod-taps.
+ * Both hands emit LEFT-side mod codes, matching ~/.config/kanata/kanata.kbd.
+ *
+ * NOTE: kanata grabs every keyboard on the Mac, so kanata.kbd carries a
+ * `macos-dev-names-exclude ("Lily58")` to stop it stacking its own home row
+ * mods on top of layer 1. Keep the two files in sync.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,25 +32,44 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 
-/ {
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-        super {
-            if-layers = <1 2>;
-            then-layer = <3>;
-        };
-    };
+/* ------------------------------------------------------------------ *
+ * Key positions, for the bilateral-combinations guard on layer 1.
+ *
+ *   0  1  2  3  4  5                6  7  8  9 10 11
+ *  12 13 14 15 16 17               18 19 20 21 22 23
+ *  24 25 26 27 28 29               30 31 32 33 34 35
+ *  36 37 38 39 40 41 42         43 44 45 46 47 48 49
+ *           50 51 52 53         54 55 56 57
+ *
+ * THUMBS also covers 42/43 (the inner Spotlight keys). They sit on a hand
+ * physically, but count as neutral so a same-side home row mod can still
+ * chord with them.
+ * ------------------------------------------------------------------ */
+#define LEFT_HAND   0  1  2  3  4  5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 39 40 41
+#define RIGHT_HAND  6  7  8  9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 44 45 46 47 48 49
+#define THUMBS     42 43 50 51 52 53 54 55 56 57
 
+#define DEF 0
+#define HRM 1
+#define NAV 2
+#define FN  3
+
+/* macOS shortcuts bound to single keys */
+#define SPOTLIGHT  LG(SPACE)          /* ⌘␣            — Spotlight            */
+#define MACCY      LC(LS(C))          /* ⌃⇧C           — Maccy clipboard      */
+#define SHOT_CLIP  LG(LC(LS(N4)))     /* ⌘⌃⇧4          — region → clipboard   */
+#define SHOT_FILE  LG(LS(N3))         /* ⌘⇧3           — full screen → file   */
+#define SNIP_FILE  LG(LS(N4))         /* ⌘⇧4           — region → file        */
+#define HERDR      LC(B)              /* ⌃B            — herdr prefix         */
+#define WISPR_HF   LC(LG(LALT))       /* ⌃⌘⌥          — Wispr Flow hands-free */
+
+/ {
     behaviors {
-        // Thumb layer-tap: HOLD = the layer, TAP = a second helping of the two
-        // keys the thumbs use most, so either inner thumb can produce them.
-        //   LOWER tap -> ENTER
-        //   RAISE tap -> SPACE
+        // Thumb layer-tap: HOLD = the layer, TAP = space.
         // hold-preferred: any other key pressed while the thumb is down resolves
         //   to HOLD instantly, so normal layer use never misfires a tap.
         // require-prior-idle-ms: pressed mid-typing-burst -> forced HOLD, so fast
-        //   rolls don't emit a stray space/enter. Both thumbs held still ->
-        //   conditional Super layer.
+        //   rolls don't emit a stray space.
         lt_thumb: layer_tap_thumb {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -41,58 +78,194 @@
             require-prior-idle-ms = <125>;
             bindings = <&mo>, <&kp>;
         };
+
+        // Layer-tap for the four FINGER keys that reach a layer — Tab, Dash and
+        // both Enters. "balanced" rather than hold-preferred: these sit in the
+        // typing stream, and hold-preferred would turn "Tab then a letter" into
+        // a layer press. Balanced only commits to the hold once the other key is
+        // pressed AND released inside it.
+        lt_key: layer_tap_key {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <125>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        /* ---------------- home row mods (layer 1 only) ----------------
+         * ZMK translation of kanata's `tap-hold-release-keys`:
+         *
+         *   flavor = "balanced"        -> hold only commits once the OTHER key
+         *       has been pressed AND released inside the hold. Same resolution
+         *       rule as tap-hold-release.
+         *
+         *   hold-trigger-key-positions -> bilateral combinations. kanata lists
+         *       the SAME-hand keys that force a tap; ZMK lists the OPPOSITE-hand
+         *       positions allowed to trigger a hold. Same rule, inverted
+         *       spelling. Thumbs count for both hands.
+         *
+         *   hold-trigger-on-release    -> defers the positional check to key
+         *       release so a second mod can stack on the first (hold F + hold D,
+         *       then tap J = ⌘⌥J). ZMK's equivalent of kanata's
+         *       `concurrent-tap-hold yes`.
+         *
+         *   quick-tap-ms = 200         -> kanata's `tap-time`: tap then re-press
+         *       inside 200ms auto-repeats the letter instead of holding a mod.
+         *
+         *   require-prior-idle-ms      -> no kanata equivalent; ZMK has no
+         *       same-hand "force the tap now" escape hatch, so a mod pressed
+         *       inside a typing burst is forced to its letter. First knob to
+         *       lower if legitimate chords feel blocked.
+         */
+        hml: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <125>;
+            hold-trigger-key-positions = <RIGHT_HAND THUMBS>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
+
+        hmr: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <125>;
+            hold-trigger-key-positions = <LEFT_HAND THUMBS>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
+
+        /* Pinky variants. 240ms, not 200: the 2026-08-06 typing profile
+         * (603 keystrokes) measured the left pinky at p50 109ms / p90 146ms /
+         * max 205ms, versus 77-90ms p50 on every other finger. Same 240ms the
+         * laptop uses via $pinky-hold-time. Re-measure with
+         * `swift ~/.config/kanata/typing-profile.swift` (kanata stopped).
+         *
+         * require-prior-idle-ms is 100 rather than 125 because unlike the other
+         * mods, shift genuinely IS needed mid-burst — a capital mid-sentence.
+         */
+        hml_pinky: home_row_mod_left_pinky {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <240>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <100>;
+            hold-trigger-key-positions = <RIGHT_HAND THUMBS>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
+
+        hmr_pinky: home_row_mod_right_pinky {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <240>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <100>;
+            hold-trigger-key-positions = <LEFT_HAND THUMBS>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
-// |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
-// |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-// | CTRL  |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-// | SHIFT |  Z  |  X  |  C   |  V   |  B   |   "["  |  |  "]"  |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-//                     | ALT  | GUI  | LOWER|  BSPC  |  | SPACE | RAISE| ENTER |  Fn   |
+// |  ESC   |  1  |  2  |  3  |  4  |  5  |                 |  6  |  7  |  8  |  9  |  0  |   =    |
+// | TAB/FN |  Q  |  W  |  E  |  R  |  T  |                 |  Y  |  U  |  I  |  O  |  P  | -/FN   |
+// | ENT/NAV|  A  |  S  |  D  |  F  |  G  |                 |  H  |  J  |  K  |  L  |  '  | ENT/NAV|
+// | ⌃B/⇧   |  Z  |  X  |  C  |  V  |  B  | ⌘␣  |     | ⌘␣  |  N  |  M  |  ,  |  .  |  /  | ⌃⌘⌥/⇧  |
+//                      |  ⌃  | ⏎/⌥ | ⌫/⌘ | ␣/NAV |  | ␣/NAV | ⌫/⌘ | ⏎/⌥ |  ⌃  |
+//
+// The two outer bottom keys are mod-taps: TAP fires the shortcut, HOLD is still
+// Shift. Shift is always a hold and both shortcuts are always taps, so nothing
+// collides — but they are the ONLY Shift on this layer, so do not make them
+// plain &kp without putting Shift somewhere else first.
             bindings = <
-&kp ESC   &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                     &kp N6 &kp N7   &kp N8    &kp N9  &kp N0   &kp GRAVE
-&kp TAB   &kp Q  &kp W  &kp E    &kp R    &kp T                      &kp Y  &kp U    &kp I     &kp O   &kp P    &kp MINUS
-&kp LCTRL &kp A  &kp S  &kp D    &kp F    &kp G                      &kp H  &kp J    &kp K     &kp L   &kp SEMI &kp SQT
-&kp LSHFT &kp Z  &kp X  &kp C    &kp V    &kp B  &kp LBKT   &kp RBKT &kp N  &kp M    &kp COMMA &kp DOT &kp FSLH &kp RSHFT
-                        &kp LALT &kp LGUI &lt_thumb 1 RET   &kp BSPC   &kp SPACE  &lt_thumb 2 SPACE  &kp RET  &kp GLOBE
+&kp ESC          &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                              &kp N6 &kp N7 &kp N8    &kp N9  &kp N0    &kp EQUAL
+&lt_key FN TAB   &kp Q  &kp W  &kp E  &kp R  &kp T                               &kp Y  &kp U  &kp I     &kp O   &kp P     &lt_key FN MINUS
+&lt_key NAV RET  &kp A  &kp S  &kp D  &kp F  &kp G                               &kp H  &kp J  &kp K     &kp L   &kp SQT   &lt_key NAV RET
+&mt LSHFT HERDR  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp SPOTLIGHT  &kp SPOTLIGHT &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH  &mt RSHFT WISPR_HF
+                        &kp LCTRL &mt LALT RET &mt LGUI BSPC &lt_thumb NAV SPACE   &lt_thumb NAV SPACE &mt LGUI BSPC &mt LALT RET &kp LCTRL
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
-        lower_layer {
-// BT profiles / F-keys / symbols.  Z & B = Page Down, X/C/V = Vol-/Play/Vol+, [ = Home.
+        hrm_layer {
+// Toggled on and off with &tog 1, which lives on the FN layer at the H key.
+// OFF by default. Everything except the eight home-row keys is transparent, so
+// the rest of the board behaves exactly as layer 0.
+//
+//   pinky ⇧ · ring ⌃ · middle ⌥ · index ⌘, mirrored, both hands emitting
+//   LEFT-side codes. A hold only becomes a modifier when chorded with the
+//   OTHER hand or a thumb; same-hand rolls just type the letter.
+//
+// Note the right pinky mod is on ' — this layout has no ; on layer 0.
             bindings = <
-&bt BT_CLR &bt BT_SEL 0     &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3 &bt BT_SEL 4                 &trans    &trans    &trans    &trans    &trans    &trans
-&kp F1     &kp F2           &kp F3            &kp F4            &kp F5       &kp F6                       &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
-&kp GRAVE  &kp EXCL         &kp AT            &kp HASH          &kp DOLLAR   &kp PRCNT                    &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp TILDE
-&trans     &kp PG_DN        &kp C_VOL_DN      &kp C_PP          &kp C_VOL_UP &kp PG_DN &kp HOME &trans    &trans    &kp MINUS &kp PLUS  &kp LBRC  &kp RBRC  &kp PIPE
-                                              &trans            &trans       &trans    &trans   &trans    &trans    &trans    &trans
+&trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
+&trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
+&trans &hml_pinky LSHFT A &hml LCTRL S &hml LALT D &hml LGUI F &trans  &trans &hmr LGUI J &hmr LALT K &hmr LCTRL L &hmr_pinky RSHFT SQT &trans
+&trans &trans &trans &trans &trans &trans &trans          &trans &trans &trans &trans &trans &trans &trans
+                            &trans &trans &trans &trans   &trans &trans &trans &trans
             >;
         };
 
-        raise_layer {
-// Numbers / arrows.  Left A/S/D/F = Opt+4/3/2/1, Z/X/C/V = Opt+7/8/9/0 (AeroSpace workspaces).  H J K L = vim arrows.
+        nav_layer {
+// |  ~  | ⌘[  | ⌘]  | ⌘{  | ⌘}  | HOME |               | HOME | PREV | NEXT |      | MUTE | VOL+ |
+// |  `  |     | ⌘←  |  ↑  | ⌘→  | PGUP |               | PGUP |  ⌘←  |  ↑   |  ⌘→  | PLAY | VOL- |
+// |     |     |  ←  |  ↓  |  →  | PGDN |               | PGDN |  ←   |  ↓   |  →   | BRI- | BRI+ |
+// |CAPS/⇧|  [ |  ]  |  {  |  }  | END  | ⌃⇧C |   | ⌃⇧C |  END |  |   |  ;   |  :   |  \   |CAPS/⇧|
+//                   | ESC/⌃ | TAB/⌥ | DEL/⌘ |    |     | DEL/⌘ | TAB/⌥ | ESC/⌃ |
+//
+// ⌘←/⌘→ are line start/end (v14 has ⌥←/⌥→ word-wise here).
+// The inner keys are Maccy; v14 has the macOS clipboard viewer.
+// Thumbs keep their held modifier from layer 0 and change only the tap.
+//
+// BRI-/BRI+ are not in the v14 sheet either; they fill the last two free slots
+// in the bottom-right, extending the media block down a row. BRI+ sits on the
+// Enter/Nav key itself, so reach it by holding the OTHER nav key — a thumb.
             bindings = <
-&trans    &trans &trans &trans  &trans  &trans                       &trans    &trans   &kp HOME  &kp END  &trans    &trans
-&kp GRAVE &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                       &kp N6    &kp N7   &kp N8    &kp N9   &kp N0    &trans
-&trans    &kp LA(N4) &kp LA(N3) &kp LA(N2) &kp LA(N1) &trans           &kp LEFT  &kp DOWN &kp UP    &kp RIGHT &kp PG_DN &kp PG_UP
-&trans    &kp LA(N7) &kp LA(N8) &kp LA(N9) &kp LA(N0) &trans   &trans   &trans    &kp KP_PLUS &kp MINUS &kp EQUAL &kp LBKT &kp RBKT  &kp BSLH
-                        &trans  &trans  &trans    &trans   &trans    &trans    &trans   &trans
+&kp TILDE      &kp LG(LBKT) &kp LG(RBKT) &kp LG(LBRC) &kp LG(RBRC) &kp HOME                      &kp HOME  &kp C_PREV &kp C_NEXT &trans        &kp C_MUTE &kp C_VOL_UP
+&kp GRAVE      &trans       &kp LG(LEFT) &kp UP       &kp LG(RIGHT) &kp PG_UP                    &kp PG_UP &kp LG(LEFT) &kp UP   &kp LG(RIGHT) &kp C_PP   &kp C_VOL_DN
+&trans         &trans       &kp LEFT     &kp DOWN     &kp RIGHT    &kp PG_DN                     &kp PG_DN &kp LEFT   &kp DOWN   &kp RIGHT     &kp C_BRI_DN &kp C_BRI_UP
+&mt LSHFT CAPS &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SEMI   &kp COLON     &kp BSLH   &mt RSHFT CAPS
+                                         &mt LCTRL ESC &mt LALT TAB &mt LGUI DEL &trans   &trans &mt LGUI DEL &mt LALT TAB &mt LCTRL ESC
             >;
         };
 
-        super_layer {
-// Hold LOWER + RAISE.  Right hand (home-row aligned): brightness / transport / volume.
+        fn_layer {
+// | BT0 | F1  | F2  | F3  | F4  | F5  |                   |     |  7  |  8  |  9  |  +  |     |
+// | BT1 | F6  | F7  | F8  | F9  | F10 |                   |     |  4  |  5  |  6  |  -  |     |
+// | BT2 | F11 | F12 | F13 | F14 | F15 |                   | HRM |  1  |  2  |  3  |  *  |     |
+// |  ⇧  | BT3 | BT4 | BTX | ⌘⇧4 | ⌘⇧3 | ⌘⌃⇧3 | | ⌘⌃⇧3 |     |     |  0  |  .  |  /  |  ⇧  |
+//                   |  ⌃  |  ⌥  |  ⌘  |      |  |      |  ⌘  |  ⌥  |  ⌃  |
+//
+// HRM (at the H key) is &tog 1 — flips the home row mods on and off.
+//
+// The BT row is NOT in the v14 sheet; it is carried over from the previous
+// keymap. Without it there is no way to pick or clear a Bluetooth profile,
+// which on a wireless board means no way to switch or re-pair hosts.
+//
+// v14's Snip Tool / Print Screen / Win11 Clipboard are Windows-only. Mapped to
+// the macOS equivalents: region→file, full→file, and full→clipboard on the
+// inner keys.
             bindings = <
-&trans &trans &trans &trans &trans &trans                        &trans       &trans       &trans       &trans &trans &trans
-&trans &trans &trans &trans &trans &trans                        &trans &kp C_BRI_DN &kp C_BRI_UP &trans     &trans &trans
-&trans &trans &trans &trans &trans &trans                        &trans &kp C_PREV   &kp C_PP     &kp C_NEXT &trans &trans
-&trans &trans &trans &trans &trans &trans &trans        &trans   &trans &kp C_VOL_DN &kp C_MUTE &kp C_VOL_UP &trans &trans
-                            &trans &trans &trans &trans  &trans   &trans       &trans       &trans
+&bt BT_SEL 0 &kp F1       &kp F2       &kp F3      &kp F4        &kp F5                             &trans  &kp N7 &kp N8 &kp N9 &kp PLUS     &trans
+&bt BT_SEL 1 &kp F6       &kp F7       &kp F8      &kp F9        &kp F10                            &trans  &kp N4 &kp N5 &kp N6 &kp MINUS    &trans
+&bt BT_SEL 2 &kp F11      &kp F12      &kp F13     &kp F14       &kp F15                            &tog HRM &kp N1 &kp N2 &kp N3 &kp ASTERISK &trans
+&kp LSHFT    &bt BT_SEL 3 &bt BT_SEL 4 &bt BT_CLR  &kp SNIP_FILE &kp SHOT_FILE &kp SHOT_CLIP   &kp SHOT_CLIP &trans &trans &kp N0 &kp DOT &kp SLASH &kp RSHFT
+                                       &kp LCTRL   &kp LALT      &kp LGUI      &trans          &trans  &kp LGUI &kp LALT &kp LCTRL
             >;
         };
     };
