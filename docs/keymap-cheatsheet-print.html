@@ -161,10 +161,10 @@
   <div class="grid" id="grid"></div>
 
   <div class="notes">
-    <div><b>Thumbs:</b> ⌃ ⏎/⌥ ⌫/⌘ ␣/Nav, mirrored. Inner two are mod-taps — tap types Enter / Backspace, hold gives ⌥ / ⌘. On Nav the same thumbs keep the modifier and change the tap to Esc / Tab / Del.</div>
+    <div><b>Thumbs:</b> ⌃ ⌥ ⌫/⌘ ␣/Nav, mirrored. Inner two are mod-taps — tap types Enter / Backspace, hold gives ⌥ / ⌘. On Nav the same thumbs keep the modifier and change the tap to Esc / Tab / Del.</div>
     <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold = Shift, tap = ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right. On Nav they tap Caps Lock.</div>
     <div><b>Inner keys:</b> Spotlight ⌘␣ on base, Maccy ⌘⇧C on Nav, ⌘⌃⇧3 screen-to-clipboard on Fn.</div>
-    <div><b>Nav:</b> ⌘← / ⌘→ are line start / end (v14 has ⌥ word-wise). Home / PgUp / PgDn / End run down the outer column on both halves. Brightness fills the bottom-right pair.</div>
+    <div><b>Nav:</b> ⌥← / ⌥→ word-wise. Left hand = AeroSpace ⌥4/⌥3/⌥2/⌥1 and ⌥7/⌥8/⌥9/⌥0 in their old Raise-layer spots; the brackets they displaced moved up a row. Home / PgUp / PgDn / End run down the outer column on both halves. Brightness fills the bottom-right pair.</div>
     <div><b>Fn:</b> F1–F15 left, numpad right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 / ⌘⇧3 capture to file, replacing v14's Snip Tool / Print Screen.</div>
     <div><b>Shift:</b> number row → ! @ # $ % ^ &amp; * ( ) +; punctuation → _ " &lt; &gt; ?; letters uppercase.</div>
     <div><b>Still missing:</b> the AeroSpace ⌥-workspace shortcuts — nothing in v14 replaces them.</div>
@@ -182,16 +182,16 @@
   // Layer 0. Caps showing two labels are tap-on-top / hold-underneath.
   const base = {
     accent: "base", badge: "Base", title: "Alpha-numerics & symbols", how: "Default layer.",
-    left:  [["ESC","1","2","3","4","5"],
+    left:  [[K("ESC","hyper"),"1","2","3","4","5"],
             [K("Tab","Fn",FNC),"Q","W","E","R","T"],
             [K("Ent","Nav",NAVC),"A","S","D","F","G"],
             [K("^B","\u21e7"),"Z","X","C","V","B"]],
     right: [["6","7","8","9","0","="],
             ["Y","U","I","O","P",K("\u2212","Fn",FNC)],
-            ["H","J","K","L",";",K("Ent","Nav",NAVC)],
+            ["H","J","K","L","'",K("Ent","Nav",NAVC)],
             ["N","M",",",".","/",K("\u2303\u2318\u2325","\u21e7")]],
-    lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
-    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
+    lThumb: ["\u2303","\u2325",K("Bksp","\u2318"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),"\u2325","\u2303"],
     lInner: K("Spot","\u2318\u2423",CHG), rInner: K("Spot","\u2318\u2423",CHG), isBase: true
   };
 
@@ -206,10 +206,10 @@
             [K("^B","\u21e7"),"Z","X","C","V","B"]],
     right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
             ["Y","U","I","O","P",K("_","\u2212","sk")],
-            ["H","J","K","L",K(":",";","sk"),"Ent"],
+            ["H","J","K","L",K("\"","'","sk"),"Ent"],
             ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("\u2303\u2318\u2325","\u21e7")]],
-    lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
-    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
+    lThumb: ["\u2303","\u2325",K("Bksp","\u2318"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),"\u2325","\u2303"],
     lInner: K("Spot","\u2318\u2423"), rInner: K("Spot","\u2318\u2423"), isBase: true
   };
 
@@ -223,7 +223,7 @@
               [G,G,G,G,G,G]],
       right: [[G,G,G,G,G,G],
               [G,G,G,G,G,G],
-              [G,K("J","\u2318"),K("K","\u2325"),K("L","\u2303"),K(";","\u21e7"),G],
+              [G,K("J","\u2318"),K("K","\u2325"),K("L","\u2303"),K("'","\u21e7"),G],
               [G,G,G,G,G,G]],
       lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
     },
@@ -231,13 +231,13 @@
       accent: "raise", badge: "Nav", title: "Navigation, media & symbols",
       how: "Hold Space (thumb) or Enter (pinky).",
       left:  [["~","\u2318[","\u2318]","\u2318{","\u2318}","Home"],
-              ["`",G,"\u2318\u2190","\u2191","\u2318\u2192","PgUp"],
-              [G,G,"\u2190","\u2193","\u2192","PgDn"],
-              [K("Caps","\u21e7"),"[","]","{","}","End"]],
+              ["`","[","]","{","}","PgUp"],
+              [G,"\u23254","\u23253","\u23252","\u23251","PgDn"],
+              [K("Caps","\u21e7"),"\u23257","\u23258","\u23259","\u23250","End"]],
       right: [["Home","Prev","Next",G,"Mute","Vol+"],
-              ["PgUp","\u2318\u2190","\u2191","\u2318\u2192","\u23ef","Vol\u2212"],
+              ["PgUp","\u2325\u2190","\u2191","\u2325\u2192","\u23ef","Vol\u2212"],
               ["PgDn","\u2190","\u2193","\u2192","Bri\u2212","Bri+"],
-              ["End","|","'","\"","\\",K("Caps","\u21e7")]],
+              ["End","|",";",":","\\",K("Caps","\u21e7")]],
       lThumb: [K("Esc","\u2303"),K("Tab","\u2325"),K("Del","\u2318"),G],
       rThumb: [G,K("Del","\u2318"),K("Tab","\u2325"),K("Esc","\u2303")],
       lInner: K("Maccy","\u2318\u21e7C",CHG), rInner: K("Maccy","\u2318\u21e7C",CHG)

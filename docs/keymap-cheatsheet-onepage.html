@@ -151,7 +151,7 @@
   <div class="grid" id="grid"></div>
 
   <div class="foot">
-    <div><b>Thumbs</b> ⌃ · ⏎/⌥ · ⌫/⌘ · ␣/Nav, mirrored. On Nav the same thumbs keep the modifier and change only the tap — Esc, Tab, Del.</div>
+    <div><b>Thumbs</b> ⌃ · ⌥ · ⌫/⌘ · ␣/Nav, mirrored. On Nav the same thumbs keep the modifier and change only the tap — Esc, Tab, Del.</div>
     <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold ⇧, tap ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right.</div>
     <div><b>Inner keys</b> ⌘␣ Spotlight on Base · ⌘⇧C Maccy on Nav · ⌘⌃⇧3 screen-to-clipboard on Fn. ⌃ ⌥ ⌘ are on the thumbs, so HRM is optional.</div>
   </div>
@@ -169,29 +169,29 @@
     {
       accent: "base", badge: "Base · 0", title: "Alphas & symbols", how: "Default layer.",
       isBase: true,
-      left:  [["ESC",S("1","!"),S("2","@"),S("3","#"),S("4","$"),S("5","%")],
+      left:  [[K("ESC","hyper"),S("1","!"),S("2","@"),S("3","#"),S("4","$"),S("5","%")],
               [K("Tab","Fn",FNC),"Q","W","E","R","T"],
               [K("Enter","Nav",NAVC),"A","S","D","F","G"],
               [K("⌃B","⇧"),"Z","X","C","V","B"]],
       right: [[S("6","^"),S("7","&"),S("8","*"),S("9","("),S("0",")"),S("=","+")],
               ["Y","U","I","O","P",K("−","Fn",FNC,"_")],
-              ["H","J","K","L",S(";",":"),K("Enter","Nav",NAVC)],
+              ["H","J","K","L",S("'","\""),K("Enter","Nav",NAVC)],
               ["N","M",S(",","<"),S(".",">"),S("/","?"),K("⌃⌘⌥","⇧")]],
-      lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
-      rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
+      lThumb: ["⌃","⌥",K("Bksp","⌘"),K("Space","Nav",NAVC)],
+      rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),"⌥","⌃"],
       lInner: K("Spot","⌘␣",CHG), rInner: K("Spot","⌘␣",CHG)
     },
     {
       accent: "raise", badge: "Nav · 2", title: "Nav, media & symbols",
       how: "Hold Space (thumb) or Enter (pinky).",
       left:  [["~","⌘[","⌘]","⌘{","⌘}","Home"],
-              ["`",G,"⌘←","↑","⌘→","PgUp"],
-              [G,G,"←","↓","→","PgDn"],
-              [K("Caps","⇧"),"[","]","{","}","End"]],
+              ["`","[","]","{","}","PgUp"],
+              [G,"⌥4","⌥3","⌥2","⌥1","PgDn"],
+              [K("Caps","⇧"),"⌥7","⌥8","⌥9","⌥0","End"]],
       right: [["Home","Prev","Next",G,"Mute","Vol+"],
-              ["PgUp","⌘←","↑","⌘→","⏯","Vol−"],
+              ["PgUp","⌥←","↑","⌥→","⏯","Vol−"],
               ["PgDn","←","↓","→","Bri−","Bri+"],
-              ["End","|","'","\"","\\",K("Caps","⇧")]],
+              ["End","|",";",":","\\",K("Caps","⇧")]],
       lThumb: [K("Esc","⌃"),K("Tab","⌥"),K("Del","⌘"),G],
       rThumb: [G,K("Del","⌘"),K("Tab","⌥"),K("Esc","⌃")],
       lInner: K("Maccy","⌘⇧C",CHG), rInner: K("Maccy","⌘⇧C",CHG)
@@ -219,7 +219,7 @@
               [G,G,G,G,G,G]],
       right: [[G,G,G,G,G,G],
               [G,G,G,G,G,G],
-              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K(";","⇧"),G],
+              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K("'","⇧"),G],
               [G,G,G,G,G,G]],
       lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
     }

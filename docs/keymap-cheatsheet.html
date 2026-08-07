@@ -222,10 +222,10 @@
   <div id="layers"></div>
 
   <p class="footnote">
-    <b>Thumbs</b> read <b>⌃ ⏎/⌥ ⌫/⌘ ␣/Nav</b> │ <b>␣/Nav ⌫/⌘ ⏎/⌥ ⌃</b>, mirrored. The two inner mod-taps type Enter and Backspace on a tap and hold Option and Command; the ⌃ keys are plain Control. On the Nav layer the same three thumbs keep their modifier and change only the tap — <b>Esc, Tab, Del</b>.
+    <b>Thumbs</b> read <b>⌃ ⌥ ⌫/⌘ ␣/Nav</b> │ <b>␣/Nav ⌫/⌘ ⏎/⌥ ⌃</b>, mirrored. The two inner mod-taps type Enter and Backspace on a tap and hold Option and Command; the ⌃ keys are plain Control. On the Nav layer the same three thumbs keep their modifier and change only the tap — <b>Esc, Tab, Del</b>.
     <b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps rather than plain shortcuts: <b>hold</b> = Shift, <b>tap</b> = ⌃B on the left (herdr prefix) and ⌃⌘⌥ on the right (Wispr Flow hands-free). On Nav they become Caps Lock on tap, Shift on hold.
     <b>Inner keys</b> are Spotlight (⌘␣) on layer 0, Maccy (⌘⇧C) on Nav, and screen-to-clipboard (⌘⌃⇧3) on Fn.
-    <b>Nav:</b> ⌘← / ⌘→ are line start and end — the v14 sheet has ⌥← / ⌥→ for word-wise movement here. Vertical nav sits in the outer column, Home / PgUp / PgDn / End top to bottom, on both halves. <b>Brightness</b> fills the last two free slots in the bottom-right, extending the media block down a row — Bri+ sits on the Enter/Nav key, so reach it by holding a Space thumb rather than the pinky.
+    <b>Nav:</b> ⌥← / ⌥→ are word-wise movement. The left hand carries the AeroSpace workspace switches in their old Raise-layer places — A/S/D/F = ⌥4/⌥3/⌥2/⌥1, Z/X/C/V = ⌥7/⌥8/⌥9/⌥0 — and the brackets they displaced moved up a row, under the ⌘-bracket family. Vertical nav sits in the outer column, Home / PgUp / PgDn / End top to bottom, on both halves. <b>Brightness</b> fills the last two free slots in the bottom-right, extending the media block down a row — Bri+ sits on the Enter/Nav key, so reach it by holding a Space thumb rather than the pinky.
     <b>Fn:</b> F1–F15 on the left, numpad on the right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 and ⌘⇧3 are region and full-screen capture <i>to file</i>, where the v14 sheet has Snip Tool and Print Screen.
     <b>Shift:</b> the standard US layout — number row → ! @ # $ % ^ &amp; * ( ) +, punctuation → _ " &lt; &gt; ?, letters uppercase.
     <b>Still missing from the old keymap:</b> the AeroSpace ⌥-workspace shortcuts. Nothing in the v14 layout replaces them — there is room on the Fn layer's left hand if you want them back.
@@ -246,16 +246,16 @@
   // Layer 0. Caps showing two labels are tap-on-top / hold-underneath.
   const base = {
     accent: "base",
-    left:  [["ESC","1","2","3","4","5"],
+    left:  [[K("ESC","hyper"),"1","2","3","4","5"],
             [K("Tab","Fn",FNC),"Q","W","E","R","T"],
             [K("Enter","Nav",NAVC),"A","S","D","F","G"],
             [K("⌃B","⇧"),"Z","X","C","V","B"]],
     right: [["6","7","8","9","0","="],
             ["Y","U","I","O","P",K("−","Fn",FNC)],
-            ["H","J","K","L",";",K("Enter","Nav",NAVC)],
+            ["H","J","K","L","'",K("Enter","Nav",NAVC)],
             ["N","M",",",".","/",K("⌃⌘⌥","⇧")]],
-    lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
-    rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
+    lThumb: ["⌃","⌥",K("Bksp","⌘"),K("Space","Nav",NAVC)],
+    rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),"⌥","⌃"],
     lInner: K("Spot","⌘␣",CHG), rInner: K("Spot","⌘␣",CHG)
   };
 
@@ -270,7 +270,7 @@
             [K("⌃B","⇧"),"Z","X","C","V","B"]],
     right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
             ["Y","U","I","O","P",K("_","−","sk")],
-            ["H","J","K","L",K(":",";","sk"),"Enter"],
+            ["H","J","K","L",K("\"","'","sk"),"Enter"],
             ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("⌃⌘⌥","⇧")]],
     lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
     rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
@@ -287,7 +287,7 @@
               [G,G,G,G,G,G]],
       right: [[G,G,G,G,G,G],
               [G,G,G,G,G,G],
-              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K(";","⇧"),G],
+              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K("'","⇧"),G],
               [G,G,G,G,G,G]],
       lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
     },
@@ -295,13 +295,13 @@
       accent: "raise", badge: "Nav", title: "Navigation, media controls & symbols",
       how: "Hold Space (either thumb) or Enter (either home-row pinky).",
       left:  [["~","⌘[","⌘]","⌘{","⌘}","Home"],
-              ["`",G,"⌘←","↑","⌘→","PgUp"],
-              [G,G,"←","↓","→","PgDn"],
-              [K("Caps","⇧"),"[","]","{","}","End"]],
+              ["`","[","]","{","}","PgUp"],
+              [G,"⌥4","⌥3","⌥2","⌥1","PgDn"],
+              [K("Caps","⇧"),"⌥7","⌥8","⌥9","⌥0","End"]],
       right: [["Home","Prev","Next",G,"Mute","Vol+"],
-              ["PgUp","⌘←","↑","⌘→","⏯","Vol−"],
+              ["PgUp","⌥←","↑","⌥→","⏯","Vol−"],
               ["PgDn","←","↓","→","Bri−","Bri+"],
-              ["End","|","'","\"","\\",K("Caps","⇧")]],
+              ["End","|",";",":","\\",K("Caps","⇧")]],
       lThumb: [K("Esc","⌃"),K("Tab","⌥"),K("Del","⌘"),G],
       rThumb: [G,K("Del","⌘"),K("Tab","⌥"),K("Esc","⌃")],
       lInner: K("Maccy","⌘⇧C",CHG), rInner: K("Maccy","⌘⇧C",CHG)

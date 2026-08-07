@@ -62,6 +62,11 @@
 #define SNIP_FILE  LG(LS(N4))         /* ⌘⇧4           — region → file        */
 #define HERDR      LC(B)              /* ⌃B            — herdr prefix         */
 #define WISPR_HF   LC(LG(LALT))       /* ⌃⌘⌥          — Wispr Flow hands-free */
+/* Big chord modifiers: nothing else on macOS claims them, so they are safe
+ * targets for app-level hotkeys. Esc holds HYPER; swap to MEH if ⌘ gets in
+ * the way (MEH is the same chord without it). */
+#define HYPER      LS(LC(LA(LGUI)))   /* ⌃⌥⇧⌘ — reserved for quadclick      */
+#define MEH        LS(LC(LALT))       /* ⌃⌥⇧  — the ⌘-less alternative      */
 
 / {
     behaviors {
@@ -92,6 +97,24 @@
             quick-tap-ms = <200>;
             require-prior-idle-ms = <125>;
             bindings = <&mo>, <&kp>;
+        };
+
+        /* Esc: tap Esc, hold HYPER.
+         * "balanced", NOT the stock &mt hold-preferred: Esc is tapped constantly
+         * and vim's `<Esc>j` presses a key immediately after. hold-preferred
+         * would turn that into HYPER+j. Balanced only takes the hold if the
+         * other key is pressed AND released inside it -- and Esc is released
+         * before j is pressed, so it stays a tap. Holding Esc alone past the
+         * term still resolves to HYPER on timeout, which is what a mouse chord
+         * needs, since ZMK never sees the click.
+         */
+        mt_esc: mod_tap_esc {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&kp>, <&kp>;
         };
 
         /* ---------------- home row mods (layer 1 only) ----------------
@@ -181,22 +204,26 @@
         compatible = "zmk,keymap";
 
         default_layer {
-// |  ESC   |  1  |  2  |  3  |  4  |  5  |                 |  6  |  7  |  8  |  9  |  0  |   =    |
+// | ESC/HYP|  1  |  2  |  3  |  4  |  5  |                 |  6  |  7  |  8  |  9  |  0  |   =    |
 // | TAB/FN |  Q  |  W  |  E  |  R  |  T  |                 |  Y  |  U  |  I  |  O  |  P  | -/FN   |
-// | ENT/NAV|  A  |  S  |  D  |  F  |  G  |                 |  H  |  J  |  K  |  L  |  ;  | ENT/NAV|
+// | ENT/NAV|  A  |  S  |  D  |  F  |  G  |                 |  H  |  J  |  K  |  L  |  '  | ENT/NAV|
 // | ⌃B/⇧   |  Z  |  X  |  C  |  V  |  B  | ⌘␣  |     | ⌘␣  |  N  |  M  |  ,  |  .  |  /  | ⌃⌘⌥/⇧  |
-//                      |  ⌃  | ⏎/⌥ | ⌫/⌘ | ␣/NAV |  | ␣/NAV | ⌫/⌘ | ⏎/⌥ |  ⌃  |
+//                      |  ⌃  |  ⌥  | ⌫/⌘ | ␣/NAV |  | ␣/NAV | ⌫/⌘ |  ⌥  |  ⌃  |
+//
+// The Option thumbs are plain modifiers, NOT mod-taps. The Enter tap that
+// used to live there fired by accident too often. Enter is still on both
+// home-row pinkies: tap Enter, hold Nav.
 //
 // The two outer bottom keys are mod-taps: TAP fires the shortcut, HOLD is still
 // Shift. Shift is always a hold and both shortcuts are always taps, so nothing
 // collides — but they are the ONLY Shift on this layer, so do not make them
 // plain &kp without putting Shift somewhere else first.
             bindings = <
-&kp ESC          &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                              &kp N6 &kp N7 &kp N8    &kp N9  &kp N0    &kp EQUAL
+&mt_esc HYPER ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                              &kp N6 &kp N7 &kp N8    &kp N9  &kp N0    &kp EQUAL
 &lt_key FN TAB   &kp Q  &kp W  &kp E  &kp R  &kp T                               &kp Y  &kp U  &kp I     &kp O   &kp P     &lt_key FN MINUS
-&lt_key NAV RET  &kp A  &kp S  &kp D  &kp F  &kp G                               &kp H  &kp J  &kp K     &kp L   &kp SEMI  &lt_key NAV RET
+&lt_key NAV RET  &kp A  &kp S  &kp D  &kp F  &kp G                               &kp H  &kp J  &kp K     &kp L   &kp SQT   &lt_key NAV RET
 &mt LSHFT HERDR  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp SPOTLIGHT  &kp SPOTLIGHT &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH  &mt RSHFT WISPR_HF
-                        &kp LCTRL &mt LALT RET &mt LGUI BSPC &lt_thumb NAV SPACE   &lt_thumb NAV SPACE &mt LGUI BSPC &mt LALT RET &kp LCTRL
+                        &kp LCTRL &kp LALT     &mt LGUI BSPC &lt_thumb NAV SPACE   &lt_thumb NAV SPACE &mt LGUI BSPC &kp LALT     &kp LCTRL
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -211,11 +238,11 @@
 //   LEFT-side codes. A hold only becomes a modifier when chorded with the
 //   OTHER hand or a thumb; same-hand rolls just type the letter.
 //
-// Right pinky mod is on ; -- it taps whatever layer 0 has at that position.
+// Right pinky mod is on ' -- it taps whatever layer 0 has at that position.
             bindings = <
 &trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
 &trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
-&trans &hml_pinky LSHFT A &hml LCTRL S &hml LALT D &hml LGUI F &trans  &trans &hmr LGUI J &hmr LALT K &hmr LCTRL L &hmr_pinky RSHFT SEMI &trans
+&trans &hml_pinky LSHFT A &hml LCTRL S &hml LALT D &hml LGUI F &trans  &trans &hmr LGUI J &hmr LALT K &hmr LCTRL L &hmr_pinky RSHFT SQT &trans
 &trans &trans &trans &trans &trans &trans &trans          &trans &trans &trans &trans &trans &trans &trans
                             &trans &trans &trans &trans   &trans &trans &trans &trans
             >;
@@ -223,12 +250,19 @@
 
         nav_layer {
 // |  ~  | ⌘[  | ⌘]  | ⌘{  | ⌘}  | HOME |               | HOME | PREV | NEXT |      | MUTE | VOL+ |
-// |  `  |     | ⌘←  |  ↑  | ⌘→  | PGUP |               | PGUP |  ⌘←  |  ↑   |  ⌘→  | PLAY | VOL- |
-// |     |     |  ←  |  ↓  |  →  | PGDN |               | PGDN |  ←   |  ↓   |  →   | BRI- | BRI+ |
-// |CAPS/⇧|  [ |  ]  |  {  |  }  | END  | ⌘⇧C |   | ⌘⇧C |  END |  |   |  '   |  "   |  \   |CAPS/⇧|
+// |  `  |  [  |  ]  |  {  |  }  | PGUP |               | PGUP |  ⌥←  |  ↑   |  ⌥→  | PLAY | VOL- |
+// |     | ⌥4  | ⌥3  | ⌥2  | ⌥1  | PGDN |               | PGDN |  ←   |  ↓   |  →   | BRI- | BRI+ |
+// |CAPS/⇧| ⌥7 | ⌥8  | ⌥9  | ⌥0  | END  | ⌘⇧C |   | ⌘⇧C |  END |  |   |  ;   |  :   |  \   |CAPS/⇧|
 //                   | ESC/⌃ | TAB/⌥ | DEL/⌘ |    |     | DEL/⌘ | TAB/⌥ | ESC/⌃ |
 //
-// ⌘←/⌘→ are line start/end (v14 has ⌥←/⌥→ word-wise here).
+// ⌥←/⌥→ are word-wise movement, as in the v14 sheet.
+//
+// The left hand carries the AeroSpace workspace switches in exactly the places
+// they had on the old Raise layer: A/S/D/F = ⌥4/⌥3/⌥2/⌥1, Z/X/C/V = ⌥7/⌥8/⌥9/⌥0.
+// The brackets they displaced moved up one row, under the ⌘-bracket family --
+// they are the ONLY plain brackets on the whole board, so they cannot simply be
+// dropped. That row cost the left-hand ⌘←/↑/⌘→, a duplicate of the arrow
+// cluster the right hand still carries.
 // The inner keys are Maccy; v14 has the macOS clipboard viewer.
 // Thumbs keep their held modifier from layer 0 and change only the tap.
 //
@@ -237,9 +271,9 @@
 // Enter/Nav key itself, so reach it by holding the OTHER nav key — a thumb.
             bindings = <
 &kp TILDE      &kp LG(LBKT) &kp LG(RBKT) &kp LG(LBRC) &kp LG(RBRC) &kp HOME                      &kp HOME  &kp C_PREV &kp C_NEXT &trans        &kp C_MUTE &kp C_VOL_UP
-&kp GRAVE      &trans       &kp LG(LEFT) &kp UP       &kp LG(RIGHT) &kp PG_UP                    &kp PG_UP &kp LG(LEFT) &kp UP   &kp LG(RIGHT) &kp C_PP   &kp C_VOL_DN
-&trans         &trans       &kp LEFT     &kp DOWN     &kp RIGHT    &kp PG_DN                     &kp PG_DN &kp LEFT   &kp DOWN   &kp RIGHT     &kp C_BRI_DN &kp C_BRI_UP
-&mt LSHFT CAPS &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SQT    &kp DQT       &kp BSLH   &mt RSHFT CAPS
+&kp GRAVE      &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp PG_UP                    &kp PG_UP &kp LA(LEFT) &kp UP   &kp LA(RIGHT) &kp C_PP   &kp C_VOL_DN
+&trans         &kp LA(N4)   &kp LA(N3)   &kp LA(N2)   &kp LA(N1)   &kp PG_DN                     &kp PG_DN &kp LEFT   &kp DOWN   &kp RIGHT     &kp C_BRI_DN &kp C_BRI_UP
+&mt LSHFT CAPS &kp LA(N7)   &kp LA(N8)   &kp LA(N9)   &kp LA(N0)   &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SEMI   &kp COLON     &kp BSLH   &mt RSHFT CAPS
                                          &mt LCTRL ESC &mt LALT TAB &mt LGUI DEL &trans   &trans &mt LGUI DEL &mt LALT TAB &mt LCTRL ESC
             >;
         };
