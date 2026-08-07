@@ -163,7 +163,7 @@
 
   <div class="banner">
     <div>🛠️</div>
-    <div><b>Not built yet — push to build, then flash both halves.</b> This is a full replacement for the old Lower / Raise / Super scheme. Green dots mark where it departs from the v14 sheet: <b>Spotlight</b> (⌘␣) on the inner keys instead of Alfred, <b>Maccy</b> (⌃⇧C) instead of the macOS clipboard viewer, and <b>⌘⌃⇧4</b> instead of the Win11 clipboard. Snip Tool / Print Screen became their macOS counterparts, and the Bluetooth keys are carried over from the old keymap — the v14 sheet has none, and without them there is no way to switch or re-pair hosts. kanata also needs a daemon restart: it grabs every keyboard on the Mac, so <code>kanata.kbd</code> carries <code>macos-dev-names-exclude ("Lily58")</code>.</div>
+    <div><b>Not built yet — push to build, then flash both halves.</b> This is a full replacement for the old Lower / Raise / Super scheme. Green dots mark where it departs from the v14 sheet: <b>Spotlight</b> (⌘␣) on the inner keys instead of Alfred, <b>Maccy</b> (⌘⇧C) instead of the macOS clipboard viewer, and <b>⌘⌃⇧3</b> instead of the Win11 clipboard. Snip Tool / Print Screen became their macOS counterparts, and the Bluetooth keys are carried over from the old keymap — the v14 sheet has none, and without them there is no way to switch or re-pair hosts. kanata also needs a daemon restart: it grabs every keyboard on the Mac, so <code>kanata.kbd</code> carries <code>macos-dev-names-exclude ("Lily58")</code>.</div>
   </div>
 
   <div class="section-head">Base — keycaps</div>
@@ -180,7 +180,7 @@
         <tr><th>Finger</th><th>Left</th><th>Right</th><th>Modifier</th><th>Hold</th><th></th></tr>
       </thead>
       <tbody>
-        <tr><td>Pinky</td>  <td class="kc">A</td><td class="kc">'</td><td class="md">⇧ Shift</td><td class="kc">240 ms</td><td class="note">Slower finger — measured p90 146 ms, max 205 ms over 603 keystrokes. Same 240 ms the laptop uses. On <code>'</code>, not <code>;</code> — this layout has no <code>;</code> on layer 0.</td></tr>
+        <tr><td>Pinky</td>  <td class="kc">A</td><td class="kc">;</td><td class="md">⇧ Shift</td><td class="kc">240 ms</td><td class="note">Slower finger — measured p90 146 ms, max 205 ms over 603 keystrokes. Same 240 ms the laptop uses. Taps <code>;</code>, matching layer 0.</td></tr>
         <tr><td>Ring</td>   <td class="kc">S</td><td class="kc">L</td><td class="md">⌃ Control</td><td class="kc">200 ms</td><td class="note"></td></tr>
         <tr><td>Middle</td> <td class="kc">D</td><td class="kc">K</td><td class="md">⌥ Option</td><td class="kc">200 ms</td><td class="note"></td></tr>
         <tr><td>Index</td>  <td class="kc">F</td><td class="kc">J</td><td class="md">⌘ Command</td><td class="kc">200 ms</td><td class="note"></td></tr>
@@ -224,7 +224,7 @@
   <p class="footnote">
     <b>Thumbs</b> read <b>⌃ ⏎/⌥ ⌫/⌘ ␣/Nav</b> │ <b>␣/Nav ⌫/⌘ ⏎/⌥ ⌃</b>, mirrored. The two inner mod-taps type Enter and Backspace on a tap and hold Option and Command; the ⌃ keys are plain Control. On the Nav layer the same three thumbs keep their modifier and change only the tap — <b>Esc, Tab, Del</b>.
     <b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps rather than plain shortcuts: <b>hold</b> = Shift, <b>tap</b> = ⌃B on the left (herdr prefix) and ⌃⌘⌥ on the right (Wispr Flow hands-free). On Nav they become Caps Lock on tap, Shift on hold.
-    <b>Inner keys</b> are Spotlight (⌘␣) on layer 0, Maccy (⌃⇧C) on Nav, and region-to-clipboard (⌘⌃⇧4) on Fn.
+    <b>Inner keys</b> are Spotlight (⌘␣) on layer 0, Maccy (⌘⇧C) on Nav, and screen-to-clipboard (⌘⌃⇧3) on Fn.
     <b>Nav:</b> ⌘← / ⌘→ are line start and end — the v14 sheet has ⌥← / ⌥→ for word-wise movement here. Vertical nav sits in the outer column, Home / PgUp / PgDn / End top to bottom, on both halves. <b>Brightness</b> fills the last two free slots in the bottom-right, extending the media block down a row — Bri+ sits on the Enter/Nav key, so reach it by holding a Space thumb rather than the pinky.
     <b>Fn:</b> F1–F15 on the left, numpad on the right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 and ⌘⇧3 are region and full-screen capture <i>to file</i>, where the v14 sheet has Snip Tool and Print Screen.
     <b>Shift:</b> the standard US layout — number row → ! @ # $ % ^ &amp; * ( ) +, punctuation → _ " &lt; &gt; ?, letters uppercase.
@@ -252,7 +252,7 @@
             [K("⌃B","⇧"),"Z","X","C","V","B"]],
     right: [["6","7","8","9","0","="],
             ["Y","U","I","O","P",K("−","Fn",FNC)],
-            ["H","J","K","L","'",K("Enter","Nav",NAVC)],
+            ["H","J","K","L",";",K("Enter","Nav",NAVC)],
             ["N","M",",",".","/",K("⌃⌘⌥","⇧")]],
     lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
     rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
@@ -270,7 +270,7 @@
             [K("⌃B","⇧"),"Z","X","C","V","B"]],
     right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
             ["Y","U","I","O","P",K("_","−","sk")],
-            ["H","J","K","L",K("\"","'","sk"),"Enter"],
+            ["H","J","K","L",K(":",";","sk"),"Enter"],
             ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("⌃⌘⌥","⇧")]],
     lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
     rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
@@ -287,7 +287,7 @@
               [G,G,G,G,G,G]],
       right: [[G,G,G,G,G,G],
               [G,G,G,G,G,G],
-              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K("'","⇧"),G],
+              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K(";","⇧"),G],
               [G,G,G,G,G,G]],
       lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
     },
@@ -301,10 +301,10 @@
       right: [["Home","Prev","Next",G,"Mute","Vol+"],
               ["PgUp","⌘←","↑","⌘→","⏯","Vol−"],
               ["PgDn","←","↓","→","Bri−","Bri+"],
-              ["End","|",";",":","\\",K("Caps","⇧")]],
+              ["End","|","'","\"","\\",K("Caps","⇧")]],
       lThumb: [K("Esc","⌃"),K("Tab","⌥"),K("Del","⌘"),G],
       rThumb: [G,K("Del","⌘"),K("Tab","⌥"),K("Esc","⌃")],
-      lInner: K("Maccy","⌃⇧C",CHG), rInner: K("Maccy","⌃⇧C",CHG)
+      lInner: K("Maccy","⌘⇧C",CHG), rInner: K("Maccy","⌘⇧C",CHG)
     },
     {
       accent: "shift", badge: "Fn", title: "Numpad, F-keys, Bluetooth & screenshots",
@@ -318,7 +318,7 @@
               [K("HRM","toggle","hrm"),"1","2","3","*",G],
               [G,G,"0",".","/","⇧"]],
       lThumb: ["⌃","⌥","⌘",G], rThumb: [G,"⌘","⌥","⌃"],
-      lInner: K("⌘⌃⇧4","clip",CHG), rInner: K("⌘⌃⇧4","clip",CHG)
+      lInner: K("⌘⌃⇧3","clip",CHG), rInner: K("⌘⌃⇧3","clip",CHG)
     }
   ];
 

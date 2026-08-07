@@ -56,8 +56,8 @@
 
 /* macOS shortcuts bound to single keys */
 #define SPOTLIGHT  LG(SPACE)          /* ⌘␣            — Spotlight            */
-#define MACCY      LC(LS(C))          /* ⌃⇧C           — Maccy clipboard      */
-#define SHOT_CLIP  LG(LC(LS(N4)))     /* ⌘⌃⇧4          — region → clipboard   */
+#define MACCY      LG(LS(C))          /* ⌘⇧C           — Maccy clipboard      */
+#define SHOT_CLIP  LG(LC(LS(N3)))     /* ⌘⌃⇧3          — full screen → clipboard */
 #define SHOT_FILE  LG(LS(N3))         /* ⌘⇧3           — full screen → file   */
 #define SNIP_FILE  LG(LS(N4))         /* ⌘⇧4           — region → file        */
 #define HERDR      LC(B)              /* ⌃B            — herdr prefix         */
@@ -183,7 +183,7 @@
         default_layer {
 // |  ESC   |  1  |  2  |  3  |  4  |  5  |                 |  6  |  7  |  8  |  9  |  0  |   =    |
 // | TAB/FN |  Q  |  W  |  E  |  R  |  T  |                 |  Y  |  U  |  I  |  O  |  P  | -/FN   |
-// | ENT/NAV|  A  |  S  |  D  |  F  |  G  |                 |  H  |  J  |  K  |  L  |  '  | ENT/NAV|
+// | ENT/NAV|  A  |  S  |  D  |  F  |  G  |                 |  H  |  J  |  K  |  L  |  ;  | ENT/NAV|
 // | ⌃B/⇧   |  Z  |  X  |  C  |  V  |  B  | ⌘␣  |     | ⌘␣  |  N  |  M  |  ,  |  .  |  /  | ⌃⌘⌥/⇧  |
 //                      |  ⌃  | ⏎/⌥ | ⌫/⌘ | ␣/NAV |  | ␣/NAV | ⌫/⌘ | ⏎/⌥ |  ⌃  |
 //
@@ -194,7 +194,7 @@
             bindings = <
 &kp ESC          &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                              &kp N6 &kp N7 &kp N8    &kp N9  &kp N0    &kp EQUAL
 &lt_key FN TAB   &kp Q  &kp W  &kp E  &kp R  &kp T                               &kp Y  &kp U  &kp I     &kp O   &kp P     &lt_key FN MINUS
-&lt_key NAV RET  &kp A  &kp S  &kp D  &kp F  &kp G                               &kp H  &kp J  &kp K     &kp L   &kp SQT   &lt_key NAV RET
+&lt_key NAV RET  &kp A  &kp S  &kp D  &kp F  &kp G                               &kp H  &kp J  &kp K     &kp L   &kp SEMI  &lt_key NAV RET
 &mt LSHFT HERDR  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp SPOTLIGHT  &kp SPOTLIGHT &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH  &mt RSHFT WISPR_HF
                         &kp LCTRL &mt LALT RET &mt LGUI BSPC &lt_thumb NAV SPACE   &lt_thumb NAV SPACE &mt LGUI BSPC &mt LALT RET &kp LCTRL
             >;
@@ -211,11 +211,11 @@
 //   LEFT-side codes. A hold only becomes a modifier when chorded with the
 //   OTHER hand or a thumb; same-hand rolls just type the letter.
 //
-// Note the right pinky mod is on ' — this layout has no ; on layer 0.
+// Right pinky mod is on ; -- it taps whatever layer 0 has at that position.
             bindings = <
 &trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
 &trans &trans &trans &trans &trans &trans                        &trans &trans &trans &trans &trans &trans
-&trans &hml_pinky LSHFT A &hml LCTRL S &hml LALT D &hml LGUI F &trans  &trans &hmr LGUI J &hmr LALT K &hmr LCTRL L &hmr_pinky RSHFT SQT &trans
+&trans &hml_pinky LSHFT A &hml LCTRL S &hml LALT D &hml LGUI F &trans  &trans &hmr LGUI J &hmr LALT K &hmr LCTRL L &hmr_pinky RSHFT SEMI &trans
 &trans &trans &trans &trans &trans &trans &trans          &trans &trans &trans &trans &trans &trans &trans
                             &trans &trans &trans &trans   &trans &trans &trans &trans
             >;
@@ -225,7 +225,7 @@
 // |  ~  | ⌘[  | ⌘]  | ⌘{  | ⌘}  | HOME |               | HOME | PREV | NEXT |      | MUTE | VOL+ |
 // |  `  |     | ⌘←  |  ↑  | ⌘→  | PGUP |               | PGUP |  ⌘←  |  ↑   |  ⌘→  | PLAY | VOL- |
 // |     |     |  ←  |  ↓  |  →  | PGDN |               | PGDN |  ←   |  ↓   |  →   | BRI- | BRI+ |
-// |CAPS/⇧|  [ |  ]  |  {  |  }  | END  | ⌃⇧C |   | ⌃⇧C |  END |  |   |  ;   |  :   |  \   |CAPS/⇧|
+// |CAPS/⇧|  [ |  ]  |  {  |  }  | END  | ⌘⇧C |   | ⌘⇧C |  END |  |   |  '   |  "   |  \   |CAPS/⇧|
 //                   | ESC/⌃ | TAB/⌥ | DEL/⌘ |    |     | DEL/⌘ | TAB/⌥ | ESC/⌃ |
 //
 // ⌘←/⌘→ are line start/end (v14 has ⌥←/⌥→ word-wise here).
@@ -239,7 +239,7 @@
 &kp TILDE      &kp LG(LBKT) &kp LG(RBKT) &kp LG(LBRC) &kp LG(RBRC) &kp HOME                      &kp HOME  &kp C_PREV &kp C_NEXT &trans        &kp C_MUTE &kp C_VOL_UP
 &kp GRAVE      &trans       &kp LG(LEFT) &kp UP       &kp LG(RIGHT) &kp PG_UP                    &kp PG_UP &kp LG(LEFT) &kp UP   &kp LG(RIGHT) &kp C_PP   &kp C_VOL_DN
 &trans         &trans       &kp LEFT     &kp DOWN     &kp RIGHT    &kp PG_DN                     &kp PG_DN &kp LEFT   &kp DOWN   &kp RIGHT     &kp C_BRI_DN &kp C_BRI_UP
-&mt LSHFT CAPS &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SEMI   &kp COLON     &kp BSLH   &mt RSHFT CAPS
+&mt LSHFT CAPS &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SQT    &kp DQT       &kp BSLH   &mt RSHFT CAPS
                                          &mt LCTRL ESC &mt LALT TAB &mt LGUI DEL &trans   &trans &mt LGUI DEL &mt LALT TAB &mt LCTRL ESC
             >;
         };

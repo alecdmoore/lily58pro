@@ -147,7 +147,7 @@
   <div class="hrm-band">
     <div class="tag">Home-row mods · OFF by default</div>
     <div class="fingers">
-      <span><b class="kc">A</b> / <b class="kc">'</b> → <b class="md">⇧</b> <i>240ms</i></span>
+      <span><b class="kc">A</b> / <b class="kc">;</b> → <b class="md">⇧</b> <i>240ms</i></span>
       <span><b class="kc">S</b> / <b class="kc">L</b> → <b class="md">⌃</b></span>
       <span><b class="kc">D</b> / <b class="kc">K</b> → <b class="md">⌥</b></span>
       <span><b class="kc">F</b> / <b class="kc">J</b> → <b class="md">⌘</b></span>
@@ -163,7 +163,7 @@
   <div class="notes">
     <div><b>Thumbs:</b> ⌃ ⏎/⌥ ⌫/⌘ ␣/Nav, mirrored. Inner two are mod-taps — tap types Enter / Backspace, hold gives ⌥ / ⌘. On Nav the same thumbs keep the modifier and change the tap to Esc / Tab / Del.</div>
     <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold = Shift, tap = ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right. On Nav they tap Caps Lock.</div>
-    <div><b>Inner keys:</b> Spotlight ⌘␣ on base, Maccy ⌃⇧C on Nav, ⌘⌃⇧4 region-to-clipboard on Fn.</div>
+    <div><b>Inner keys:</b> Spotlight ⌘␣ on base, Maccy ⌘⇧C on Nav, ⌘⌃⇧3 screen-to-clipboard on Fn.</div>
     <div><b>Nav:</b> ⌘← / ⌘→ are line start / end (v14 has ⌥ word-wise). Home / PgUp / PgDn / End run down the outer column on both halves. Brightness fills the bottom-right pair.</div>
     <div><b>Fn:</b> F1–F15 left, numpad right, Bluetooth down the left column (BT0–BT4, BT✕ = clear). ⌘⇧4 / ⌘⇧3 capture to file, replacing v14's Snip Tool / Print Screen.</div>
     <div><b>Shift:</b> number row → ! @ # $ % ^ &amp; * ( ) +; punctuation → _ " &lt; &gt; ?; letters uppercase.</div>
@@ -188,7 +188,7 @@
             [K("^B","\u21e7"),"Z","X","C","V","B"]],
     right: [["6","7","8","9","0","="],
             ["Y","U","I","O","P",K("\u2212","Fn",FNC)],
-            ["H","J","K","L","'",K("Ent","Nav",NAVC)],
+            ["H","J","K","L",";",K("Ent","Nav",NAVC)],
             ["N","M",",",".","/",K("\u2303\u2318\u2325","\u21e7")]],
     lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
     rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
@@ -206,7 +206,7 @@
             [K("^B","\u21e7"),"Z","X","C","V","B"]],
     right: [[K("^","6","sk"),K("&","7","sk"),K("*","8","sk"),K("(","9","sk"),K(")","0","sk"),K("+","=","sk")],
             ["Y","U","I","O","P",K("_","\u2212","sk")],
-            ["H","J","K","L",K("\"","'","sk"),"Ent"],
+            ["H","J","K","L",K(":",";","sk"),"Ent"],
             ["N","M",K("<",",","sk"),K(">",".","sk"),K("?","/","sk"),K("\u2303\u2318\u2325","\u21e7")]],
     lThumb: ["\u2303",K("Ent","\u2325"),K("Bksp","\u2318"),K("Space","Nav",NAVC)],
     rThumb: [K("Space","Nav",NAVC),K("Bksp","\u2318"),K("Ent","\u2325"),"\u2303"],
@@ -223,7 +223,7 @@
               [G,G,G,G,G,G]],
       right: [[G,G,G,G,G,G],
               [G,G,G,G,G,G],
-              [G,K("J","\u2318"),K("K","\u2325"),K("L","\u2303"),K("'","\u21e7"),G],
+              [G,K("J","\u2318"),K("K","\u2325"),K("L","\u2303"),K(";","\u21e7"),G],
               [G,G,G,G,G,G]],
       lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
     },
@@ -237,10 +237,10 @@
       right: [["Home","Prev","Next",G,"Mute","Vol+"],
               ["PgUp","\u2318\u2190","\u2191","\u2318\u2192","\u23ef","Vol\u2212"],
               ["PgDn","\u2190","\u2193","\u2192","Bri\u2212","Bri+"],
-              ["End","|",";",":","\\",K("Caps","\u21e7")]],
+              ["End","|","'","\"","\\",K("Caps","\u21e7")]],
       lThumb: [K("Esc","\u2303"),K("Tab","\u2325"),K("Del","\u2318"),G],
       rThumb: [G,K("Del","\u2318"),K("Tab","\u2325"),K("Esc","\u2303")],
-      lInner: K("Maccy","^\u21e7C",CHG), rInner: K("Maccy","^\u21e7C",CHG)
+      lInner: K("Maccy","\u2318\u21e7C",CHG), rInner: K("Maccy","\u2318\u21e7C",CHG)
     },
     {
       accent: "shift", badge: "Fn", title: "Numpad, F-keys, Bluetooth & screenshots",
@@ -254,7 +254,7 @@
               [K("HRM","tog","hrm"),"1","2","3","*",G],
               [G,G,"0",".","/","\u21e7"]],
       lThumb: ["\u2303","\u2325","\u2318",G], rThumb: [G,"\u2318","\u2325","\u2303"],
-      lInner: K("\u2318^\u21e74","clip",CHG), rInner: K("\u2318^\u21e74","clip",CHG)
+      lInner: K("\u2318^\u21e73","clip",CHG), rInner: K("\u2318^\u21e73","clip",CHG)
     }
   ];
 

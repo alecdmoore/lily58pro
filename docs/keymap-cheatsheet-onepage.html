@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lily58 Pro — All Layers, One Screen</title>
+<style>
+  /* Every dimension on this page derives from --cap, the keycap edge length.
+     fit() below solves for --cap so the whole sheet lands inside the viewport,
+     whatever it happens to be. Because the scaling is real layout rather than a
+     transform, text stays crisp and one or two passes converge. Anything added
+     here MUST be expressed in terms of --cap or the fit will not converge. */
+  :root {
+    --bg: #e9edf1; --panel: #ffffff; --ink: #1b222a; --muted: #5c6875;
+    --hair: #d3dae1; --ghost: #b6c0ca; --cap-top: #ffffff; --cap-bot: #eef1f4; --cap-edge: #c7cfd8;
+    --new: #0d8a86;  --sh: #a86000;
+    --hrm: #c2255c;   --hrm-soft: #fde8ef;
+    --base: #3a4652;  --base-soft: #e5e9ee;
+    --raise: #3b5bdb; --raise-soft: #e6ebfb;
+    --shift: #7c3aed; --shift-soft: #efe7fd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+      --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d;
+      --new: #3fb8b2; --sh: #e0a14a;
+      --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+      --base: #aab6c2; --base-soft: #2c353f;
+      --raise: #7aa2ff; --raise-soft: #1e2740;
+      --shift: #b998ff; --shift-soft: #241d3a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171c; --panel: #1a2128; --ink: #e7edf2; --muted: #93a1ad;
+    --hair: #2b343d; --ghost: #3d4854; --cap-top: #2a333c; --cap-bot: #202832; --cap-edge: #38424d;
+    --new: #3fb8b2; --sh: #e0a14a;
+    --hrm: #ff8fb1; --hrm-soft: #3a1f2a;
+    --base: #aab6c2; --base-soft: #2c353f;
+    --raise: #7aa2ff; --raise-soft: #1e2740;
+    --shift: #b998ff; --shift-soft: #241d3a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         -webkit-font-smoothing: antialiased;
+         display: flex; align-items: center; justify-content: center; }
+
+  #sheet { --cap: 40px; --g: calc(var(--cap) * 0.13); }
+
+  .mast { display: flex; align-items: baseline; gap: calc(var(--cap) * 0.42);
+          flex-wrap: wrap; margin-bottom: calc(var(--cap) * 0.26); }
+  .mast h1 { font-size: calc(var(--cap) * 0.44); margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+  .legend { display: flex; gap: calc(var(--cap) * 0.36); flex-wrap: wrap;
+            font-size: calc(var(--cap) * 0.26); color: var(--muted); align-items: center; }
+  .legend b { color: var(--ink); font-weight: 700; }
+  .legend > span { white-space: nowrap; }
+  .swatch { display: inline-block; width: calc(var(--cap) * 0.24); height: calc(var(--cap) * 0.24);
+            border-radius: calc(var(--cap) * 0.07); vertical-align: -0.05em; margin-right: calc(var(--cap) * 0.13); }
+  .dot-new { display: inline-block; width: calc(var(--cap) * 0.2); height: calc(var(--cap) * 0.2);
+             border-radius: 50%; background: var(--new); margin-right: calc(var(--cap) * 0.13); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--cap) * 0.3); }
+
+  .layer { background: var(--panel); border: 1px solid var(--hair);
+           border-radius: calc(var(--cap) * 0.3); padding: calc(var(--cap) * 0.3) calc(var(--cap) * 0.34) calc(var(--cap) * 0.4); }
+  /* Two lines, not one. On a single line the heading text was wider than the
+     keyboard beneath it and became what set the sheet width -- which capped
+     --cap about 30% below what the viewport could actually carry. */
+  .layer__head { display: grid; grid-template-columns: auto 1fr; align-items: baseline;
+                 gap: 0 calc(var(--cap) * 0.24); margin-bottom: calc(var(--cap) * 0.26); }
+  .layer__how { grid-column: 2; }
+  .badge { font-size: calc(var(--cap) * 0.25); font-weight: 800; letter-spacing: 0.05em;
+           text-transform: uppercase; color: #fff; padding: calc(var(--cap)*0.06) calc(var(--cap)*0.2);
+           border-radius: calc(var(--cap) * 0.13); background: var(--accent); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .badge { color: #12171c; } }
+  :root[data-theme="dark"] .badge { color: #12171c; }
+  .layer__title { font-size: calc(var(--cap) * 0.3); font-weight: 700; }
+  .layer__how { color: var(--muted); font-size: calc(var(--cap) * 0.25); }
+
+  .board { display: flex; justify-content: center; gap: calc(var(--cap) * 0.85); }
+  .half { display: flex; flex-direction: column; align-items: center; gap: calc(var(--cap) * 0.2); }
+  .rows { display: flex; gap: var(--g); }
+  .col { display: flex; flex-direction: column; gap: var(--g); }
+  .thumbs { display: flex; align-items: flex-end; gap: var(--g); }
+  .half--left .thumbs { padding-left: calc(var(--cap) * 2.1); }
+  .half--right .thumbs { padding-right: calc(var(--cap) * 2.1); }
+
+  .cap { width: var(--cap); height: var(--cap); border-radius: calc(var(--cap) * 0.16);
+         display: flex; flex-direction: column; align-items: center; justify-content: center;
+         text-align: center; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+         font-size: calc(var(--cap) * 0.3); font-weight: 600; line-height: 1.02;
+         background: linear-gradient(180deg, var(--cap-top), var(--cap-bot));
+         border: 1px solid var(--cap-edge); color: var(--ink);
+         box-shadow: 0 1px 0 var(--cap-edge); padding: calc(var(--cap) * 0.04);
+         overflow: hidden; position: relative; }
+  .cap .sh { font-size: calc(var(--cap) * 0.21); font-weight: 800; color: var(--sh);
+             line-height: 1; margin-bottom: calc(var(--cap) * 0.02); }
+  .cap .s { font-size: calc(var(--cap) * 0.2); font-weight: 700; color: var(--muted);
+            margin-top: calc(var(--cap) * 0.03); text-transform: uppercase; }
+  .cap.small { font-size: calc(var(--cap) * 0.24); font-weight: 700; }
+  .cap.tiny  { font-size: calc(var(--cap) * 0.195); font-weight: 700; }
+  .cap.wide  { width: calc(var(--cap) * 1.3); }
+  .cap.act { background: var(--accent-soft); border-color: var(--accent); }
+  .cap.act .s { color: var(--accent); }
+  .cap.hrm { background: var(--hrm-soft); border-color: var(--hrm); }
+  .cap.hrm .s { color: var(--hrm); text-transform: none; }
+  .cap.k-nav { background: var(--raise-soft); border-color: var(--raise); }
+  .cap.k-nav .s { color: var(--raise); }
+  .cap.k-lay2 { background: var(--shift-soft); border-color: var(--shift); }
+  .cap.k-lay2 .s { color: var(--shift); }
+  .cap.ghost { background: transparent; border: 1px dashed var(--ghost); box-shadow: none;
+               color: var(--ghost); font-weight: 700; }
+  .cap.chg::before { content: ""; position: absolute; top: calc(var(--cap) * 0.07); right: calc(var(--cap) * 0.07);
+                     width: calc(var(--cap) * 0.15); height: calc(var(--cap) * 0.15);
+                     border-radius: 50%; background: var(--new); }
+  .cap.home::after { content: ""; position: absolute; bottom: calc(var(--cap) * 0.09); left: 50%;
+                     transform: translateX(-50%); width: calc(var(--cap) * 0.27); height: calc(var(--cap) * 0.06);
+                     border-radius: 2px; background: var(--muted); opacity: 0.85; }
+  .cap.act.home::after { background: var(--accent); }
+
+  /* Columns are capped in --cap units. Left to size themselves this prose was
+     the widest thing on the page and became the width driver, squeezing --cap
+     ~25% below what the grid of boards actually needed. */
+  .foot { margin-top: calc(var(--cap) * 0.26); color: var(--muted);
+          font-size: calc(var(--cap) * 0.245); line-height: 1.4;
+          display: grid; gap: calc(var(--cap)*0.1) calc(var(--cap) * 0.5);
+          grid-template-columns: repeat(3, minmax(0, calc(var(--cap) * 12.3))); }
+  .foot b { color: var(--ink); }
+  .foot code { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+
+<div id="sheet">
+  <div class="mast">
+    <h1>Lily58 Pro — all layers</h1>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--raise)"></span><b>NAV</b> hold Space / Enter</span>
+      <span><span class="swatch" style="background:var(--shift)"></span><b>FN</b> hold Tab / −</span>
+      <span><span class="swatch" style="background:var(--hrm)"></span><b>HRM</b> toggled, off by default</span>
+      <span><span class="dot-new"></span>differs from the v14 sheet</span>
+      <span><span class="swatch" style="background:var(--ghost)"></span>dashed = pass-through</span>
+      <span><b style="color:var(--sh)">amber</b> = shifted glyph</span>
+      <span>bar = homing bump (F / J)</span>
+      <span>two labels = <b>tap</b> over <b>hold</b></span>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    <div><b>Thumbs</b> ⌃ · ⏎/⌥ · ⌫/⌘ · ␣/Nav, mirrored. On Nav the same thumbs keep the modifier and change only the tap — Esc, Tab, Del.</div>
+    <div><b>Bottom-outer keys</b> are the only Shift on layer 0, so they are mod-taps: hold ⇧, tap ⌃B (herdr) left, ⌃⌘⌥ (Wispr hands-free) right.</div>
+    <div><b>Inner keys</b> ⌘␣ Spotlight on Base · ⌘⇧C Maccy on Nav · ⌘⌃⇧3 screen-to-clipboard on Fn. ⌃ ⌥ ⌘ are on the thumbs, so HRM is optional.</div>
+  </div>
+</div>
+
+<script>
+  const G = null;
+  function K(t, s, cls, sh) { return { t, s, cls, sh }; }
+  const S = (t, sh) => K(t, null, null, sh);   // plain key + its shifted glyph
+  const CHG = "chg";
+  const NAVC = "k-nav";
+  const FNC  = "k-lay2";
+
+  const boards = [
+    {
+      accent: "base", badge: "Base · 0", title: "Alphas & symbols", how: "Default layer.",
+      isBase: true,
+      left:  [["ESC",S("1","!"),S("2","@"),S("3","#"),S("4","$"),S("5","%")],
+              [K("Tab","Fn",FNC),"Q","W","E","R","T"],
+              [K("Enter","Nav",NAVC),"A","S","D","F","G"],
+              [K("⌃B","⇧"),"Z","X","C","V","B"]],
+      right: [[S("6","^"),S("7","&"),S("8","*"),S("9","("),S("0",")"),S("=","+")],
+              ["Y","U","I","O","P",K("−","Fn",FNC,"_")],
+              ["H","J","K","L",S(";",":"),K("Enter","Nav",NAVC)],
+              ["N","M",S(",","<"),S(".",">"),S("/","?"),K("⌃⌘⌥","⇧")]],
+      lThumb: ["⌃",K("Enter","⌥"),K("Bksp","⌘"),K("Space","Nav",NAVC)],
+      rThumb: [K("Space","Nav",NAVC),K("Bksp","⌘"),K("Enter","⌥"),"⌃"],
+      lInner: K("Spot","⌘␣",CHG), rInner: K("Spot","⌘␣",CHG)
+    },
+    {
+      accent: "raise", badge: "Nav · 2", title: "Nav, media & symbols",
+      how: "Hold Space (thumb) or Enter (pinky).",
+      left:  [["~","⌘[","⌘]","⌘{","⌘}","Home"],
+              ["`",G,"⌘←","↑","⌘→","PgUp"],
+              [G,G,"←","↓","→","PgDn"],
+              [K("Caps","⇧"),"[","]","{","}","End"]],
+      right: [["Home","Prev","Next",G,"Mute","Vol+"],
+              ["PgUp","⌘←","↑","⌘→","⏯","Vol−"],
+              ["PgDn","←","↓","→","Bri−","Bri+"],
+              ["End","|","'","\"","\\",K("Caps","⇧")]],
+      lThumb: [K("Esc","⌃"),K("Tab","⌥"),K("Del","⌘"),G],
+      rThumb: [G,K("Del","⌘"),K("Tab","⌥"),K("Esc","⌃")],
+      lInner: K("Maccy","⌘⇧C",CHG), rInner: K("Maccy","⌘⇧C",CHG)
+    },
+    {
+      accent: "shift", badge: "Fn · 3", title: "Numpad, F-keys, BT",
+      how: "Hold Tab (left pinky) or − (right pinky).",
+      left:  [["BT0","F1","F2","F3","F4","F5"],
+              ["BT1","F6","F7","F8","F9","F10"],
+              ["BT2","F11","F12","F13","F14","F15"],
+              ["⇧","BT3","BT4","BT✕",K("⌘⇧4","region"),K("⌘⇧3","screen")]],
+      right: [[G,"7","8","9","+",G],
+              [G,"4","5","6","−",G],
+              [K("HRM","toggle","hrm"),"1","2","3","*",G],
+              [G,G,"0",".","/","⇧"]],
+      lThumb: ["⌃","⌥","⌘",G], rThumb: [G,"⌘","⌥","⌃"],
+      lInner: K("⌘⌃⇧3","clip",CHG), rInner: K("⌘⌃⇧3","clip",CHG)
+    },
+    {
+      accent: "hrm", badge: "HRM · 1", title: "Home row mods — off",
+      how: "Toggle: H on the Fn layer.",
+      left:  [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("A","⇧"),K("S","⌃"),K("D","⌥"),K("F","⌘"),G],
+              [G,G,G,G,G,G]],
+      right: [[G,G,G,G,G,G],
+              [G,G,G,G,G,G],
+              [G,K("J","⌘"),K("K","⌥"),K("L","⌃"),K(";","⇧"),G],
+              [G,G,G,G,G,G]],
+      lThumb: [G,G,G,G], rThumb: [G,G,G,G], lInner: G, rInner: G
+    }
+  ];
+
+  // Column stagger, as a multiple of --cap so it scales with everything else.
+  const stagLeft  = [0.20, 0.09, 0, 0.09, 0.25, 0.32];
+  const stagRight = [0.32, 0.25, 0.09, 0, 0.09, 0.20];
+
+  function cap(item, opts = {}) {
+    const d = document.createElement("div");
+    d.className = "cap";
+    if (opts.home) d.classList.add("home");
+    if (item === null || item === undefined) { d.classList.add("ghost"); d.textContent = "·"; return d; }
+    const obj = (typeof item === "string") ? { t: item } : item;
+    const label = obj.t;
+    if (label.length >= 4) d.classList.add("tiny");
+    else if (label.length === 3) d.classList.add("small");
+    if (opts.wide) d.classList.add("wide");
+    if (opts.act) d.classList.add("act");
+    if (obj.cls) obj.cls.split(" ").forEach(c => d.classList.add(c));
+    if (obj.sh) { const sh = document.createElement("div"); sh.className = "sh"; sh.textContent = obj.sh; d.appendChild(sh); }
+    const main = document.createElement("div"); main.textContent = label; d.appendChild(main);
+    if (obj.s) { const s = document.createElement("div"); s.className = "s"; s.textContent = obj.s; d.appendChild(s); }
+    return d;
+  }
+
+  function buildHalf(side, data) {
+    const isBase = !!data.isBase;
+    const half = document.createElement("div");
+    half.className = "half half--" + side;
+    const rows = document.createElement("div"); rows.className = "rows";
+    const grid = side === "left" ? data.left : data.right;
+    const stag = side === "left" ? stagLeft : stagRight;
+    for (let c = 0; c < 6; c++) {
+      const col = document.createElement("div"); col.className = "col";
+      col.style.marginTop = "calc(var(--cap) * " + stag[c] + ")";
+      for (let r = 0; r < 4; r++) {
+        const item = grid[r][c];
+        const isHome = r === 2 && ((side === "left" && c === 4) || (side === "right" && c === 1));
+        col.appendChild(cap(item, { act: !isBase && item !== null, home: isHome }));
+      }
+      rows.appendChild(col);
+    }
+    half.appendChild(rows);
+    const thumbs = document.createElement("div"); thumbs.className = "thumbs";
+    const tArr = side === "left" ? data.lThumb : data.rThumb;
+    const inner = side === "left" ? data.lInner : data.rInner;
+    const act = !isBase;
+    const innerCap = cap(inner, { act: act && inner !== null });
+    innerCap.style.marginBottom = "calc(var(--cap) * 0.6)";
+    if (side === "left") { tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); thumbs.appendChild(innerCap); }
+    else { thumbs.appendChild(innerCap); tArr.forEach(t => thumbs.appendChild(cap(t, { wide: true, act: act && t !== null }))); }
+    half.appendChild(thumbs);
+    return half;
+  }
+
+  const grid = document.getElementById("grid");
+  boards.forEach(data => {
+    const card = document.createElement("section"); card.className = "layer";
+    card.style.setProperty("--accent", "var(--" + data.accent + ")");
+    card.style.setProperty("--accent-soft", "var(--" + data.accent + "-soft)");
+    const head = document.createElement("div"); head.className = "layer__head";
+    const b = document.createElement("span"); b.className = "badge"; b.textContent = data.badge;
+    const t = document.createElement("span"); t.className = "layer__title"; t.textContent = data.title;
+    const h = document.createElement("span"); h.className = "layer__how"; h.textContent = data.how;
+    head.append(b, t, h);
+    card.appendChild(head);
+    const board = document.createElement("div"); board.className = "board";
+    board.appendChild(buildHalf("left", data));
+    board.appendChild(buildHalf("right", data));
+    card.appendChild(board);
+    grid.appendChild(card);
+  });
+
+  // Solve for --cap so the sheet fills the viewport without overflowing it.
+  // Layout is linear in --cap, so this converges in two or three passes; the
+  // loop is capped and has an epsilon exit so it can never spin.
+  const sheet = document.getElementById("sheet");
+  const MARGIN = 0.975;   // breathing room against the window edges
+  const MIN_CAP = 8, MAX_CAP = 120;
+
+  const capNow = () => parseFloat(sheet.style.getPropertyValue("--cap")) || 40;
+  const size   = () => { const r = sheet.getBoundingClientRect(); return { w: r.width, h: r.height }; };
+  const fits   = () => { const s = size();
+                         return s.w <= window.innerWidth && s.h <= window.innerHeight; };
+
+  function fit() {
+    // Solve. Layout is linear in --cap, so this lands in one pass; the extra
+    // passes absorb the non-linear bits (1px borders, text re-wrapping).
+    for (let i = 0; i < 8; i++) {
+      const cur = capNow(), s = size();
+      if (!s.w || !s.h) return;
+      const k = Math.min(window.innerWidth * MARGIN / s.w, window.innerHeight * MARGIN / s.h);
+      if (Math.abs(k - 1) < 0.003) break;
+      const next = Math.max(MIN_CAP, Math.min(MAX_CAP, cur * k));
+      if (next === cur) break;
+      sheet.style.setProperty("--cap", next + "px");
+    }
+    // Guarantee. Re-wrapping text can make the solve oscillate and settle a
+    // hair over; body is overflow:hidden, so an overflow would be clipped
+    // rather than scrollable. Shrink until it genuinely fits.
+    for (let i = 0; i < 40 && !fits(); i++) {
+      const cur = capNow();
+      if (cur <= MIN_CAP) break;
+      sheet.style.setProperty("--cap", Math.max(MIN_CAP, cur * 0.98) + "px");
+    }
+  }
+
+  sheet.style.setProperty("--cap", "40px");
+  fit();
+  addEventListener("resize", fit);
+  // Webfont/metrics settle after first paint; re-solve once more.
+  requestAnimationFrame(fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+</script>
+
+</body>
+</html>
