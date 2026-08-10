@@ -8,14 +8,22 @@
  *   1 hrm      home row mods — TOGGLED, off by default (&tog 1 on layer 3)
  *   2 nav      navigation, media controls & symbols   (v14 calls this "Layer 1")
  *   3 fn       numpad, F-keys, BT, screenshots        (v14 calls this "Layer 2")
+ *   4 mou      mouse emulation — TOGGLED, off by default
+ *   5 snipe    slow-cursor overlay, held from inside mou
  *
  * LAYER ORDER IS LOAD-BEARING. ZMK resolves the highest ACTIVE layer first, so
  * `hrm` must sit below `nav`/`fn`. At index 4 it would shadow nav's arrows on
  * S / D / F whenever it was toggled on. Do not renumber without re-checking.
  *
+ * `mou` and `snipe` sit ABOVE nav/fn, which is the opposite of the hrm rule and
+ * is deliberate: while the cursor is live, the mouse cluster must beat nav's
+ * arrows on the same I/J/K/L keys. The cost is that nav is unreachable with mou
+ * toggled on — leave mou first.
+ *
  * Reaching the layers:
  *   nav  — hold Space (either thumb) or Enter (either home-row pinky)
  *   fn   — hold Tab (left pinky) or Dash (right pinky)
+ *   mou  — &tog on fn at [6], or the O+L combo; same key/combo exits
  *
  * Modifiers live on the thumbs: ⌃ outer, then Enter/⌥ and Bksp/⌘ as mod-taps.
  * Both hands emit LEFT-side mod codes, matching ~/.config/kanata/kanata.kbd.
@@ -31,6 +39,8 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/pointing.h>
 
 /* ------------------------------------------------------------------ *
  * Key positions, for the bilateral-combinations guard on layer 1.
@@ -49,10 +59,12 @@
 #define RIGHT_HAND  6  7  8  9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 44 45 46 47 48 49
 #define THUMBS     42 43 50 51 52 53 54 55 56 57
 
-#define DEF 0
-#define HRM 1
-#define NAV 2
-#define FN  3
+#define DEF   0
+#define HRM   1
+#define NAV   2
+#define FN    3
+#define MOU   4
+#define SNIPE 5
 
 /* macOS shortcuts bound to single keys */
 #define SPOTLIGHT  LG(SPACE)          /* ⌘␣            — Spotlight            */
@@ -200,6 +212,56 @@
         };
     };
 
+    /* ------------------------------------------------------------------
+     * Combos.
+     *
+     * SCOPING: combos match against the HIGHEST active layer only, not
+     * every active layer — see zmk_keymap_highest_layer_active() in
+     * combo.c. `hrm` is a TOGGLE, so a combo listing only DEF silently
+     * stops working the moment home row mods are switched on. Every base
+     * combo therefore lists <DEF HRM>.
+     *
+     * POSITIONS: same-hand only — cross-half combos add the peripheral to
+     * central hop and the window gets fragile. Every pair below is either
+     * bottom-row or a same-finger vertical, i.e. a bigram that does not
+     * occur in English. The home row is off limits entirely: those are the
+     * hrm keys whenever layer 1 is on.
+     *
+     * NO require-prior-idle-ms here, unlike the hold-taps above. It would
+     * break `foo(` — you do not pause before typing a paren. Safe key
+     * positions do the same job without the timing cost.
+     * ------------------------------------------------------------------ */
+    combos {
+        compatible = "zmk,combos";
+
+        /* Brackets, mirrored across the bottom row: left hand opens, right
+         * hand closes. Z<->/  X<->.  C<->,  V<->M — one rule, six bindings.
+         * These are the only parentheses on the board; the number row needs
+         * shift, and nav's brackets need a layer hold. */
+        cbo_lpar { key-positions = <38 39>; bindings = <&kp LPAR>; timeout-ms = <40>; layers = <DEF HRM>; };
+        cbo_rpar { key-positions = <46 47>; bindings = <&kp RPAR>; timeout-ms = <40>; layers = <DEF HRM>; };
+        cbo_lbkt { key-positions = <39 40>; bindings = <&kp LBKT>; timeout-ms = <40>; layers = <DEF HRM>; };
+        cbo_rbkt { key-positions = <45 46>; bindings = <&kp RBKT>; timeout-ms = <40>; layers = <DEF HRM>; };
+
+        /* Pinky pairs get a wider window. The 2026-08-06 typing profile put
+         * the left pinky at p50 109ms against 77-90ms everywhere else. */
+        cbo_lbrc { key-positions = <37 38>; bindings = <&kp LBRC>; timeout-ms = <55>; layers = <DEF HRM>; };
+        cbo_rbrc { key-positions = <47 48>; bindings = <&kp RBRC>; timeout-ms = <55>; layers = <DEF HRM>; };
+
+        /* Same-finger verticals — one finger owns both keys, so no roll at
+         * any speed can trigger them. */
+        cbo_under { key-positions = <19 31>; bindings = <&kp UNDER>;  timeout-ms = <50>; layers = <DEF HRM>; };
+        cbo_minus { key-positions = <20 32>; bindings = <&kp MINUS>;  timeout-ms = <50>; layers = <DEF HRM>; };
+        cbo_caps  { key-positions = <14 26>; bindings = <&caps_word>; timeout-ms = <50>; layers = <DEF HRM>; };
+        cbo_mouse { key-positions = <21 33>; bindings = <&tog MOU>;   timeout-ms = <50>; layers = <DEF HRM>; };
+
+        /* AeroSpace workspaces 5 and 6 — the two nav has no room for. Same
+         * physical positions as the paren/bracket combos above; nav is the
+         * higher layer, so it wins and there is no conflict. */
+        cbo_ws5 { key-positions = <38 39>; bindings = <&kp LA(N5)>; timeout-ms = <40>; layers = <NAV>; };
+        cbo_ws6 { key-positions = <39 40>; bindings = <&kp LA(N6)>; timeout-ms = <40>; layers = <NAV>; };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -270,7 +332,7 @@
 // in the bottom-right, extending the media block down a row. BRI+ sits on the
 // Enter/Nav key itself, so reach it by holding the OTHER nav key — a thumb.
             bindings = <
-&kp TILDE      &kp LG(LBKT) &kp LG(RBKT) &kp LG(LBRC) &kp LG(RBRC) &kp HOME                      &kp HOME  &kp C_PREV &kp C_NEXT &trans        &kp C_MUTE &kp C_VOL_UP
+&kp TILDE      &kp LG(LBKT) &kp LG(RBKT) &kp LG(LBRC) &kp LG(RBRC) &kp HOME                      &kp HOME  &kp C_PREV &kp C_NEXT &caps_word    &kp C_MUTE &kp C_VOL_UP
 &kp GRAVE      &kp LBKT     &kp RBKT     &kp LBRC     &kp RBRC     &kp PG_UP                    &kp PG_UP &kp LA(LEFT) &kp UP   &kp LA(RIGHT) &kp C_PP   &kp C_VOL_DN
 &trans         &kp LA(N4)   &kp LA(N3)   &kp LA(N2)   &kp LA(N1)   &kp PG_DN                     &kp PG_DN &kp LEFT   &kp DOWN   &kp RIGHT     &kp C_BRI_DN &kp C_BRI_UP
 &mt LSHFT CAPS &kp LA(N7)   &kp LA(N8)   &kp LA(N9)   &kp LA(N0)   &kp END   &kp MACCY &kp MACCY &kp END   &kp PIPE   &kp SEMI   &kp COLON     &kp BSLH   &mt RSHFT CAPS
@@ -279,13 +341,25 @@
         };
 
         fn_layer {
-// | BT0 | F1  | F2  | F3  | F4  | F5  |                   |     |  7  |  8  |  9  |  +  |     |
-// | BT1 | F6  | F7  | F8  | F9  | F10 |                   |     |  4  |  5  |  6  |  -  |     |
+// | BT0 | F1  | F2  | F3  | F4  | F5  |                   | MOU |  7  |  8  |  9  |  +  | BOOT|
+// | BT1 | F6  | F7  | F8  | F9  | F10 |                   | OUT |  4  |  5  |  6  |  -  |     |
 // | BT2 | F11 | F12 | F13 | F14 | F15 |                   | HRM |  1  |  2  |  3  |  *  |     |
-// |  ⇧  | BT3 | BT4 | BTX | ⌘⇧4 | ⌘⇧3 | ⌘⌃⇧3 | | ⌘⌃⇧3 |     |     |  0  |  .  |  /  |  ⇧  |
+// |  ⇧  | BT3 | BT4 | BTX | ⌘⇧4 | ⌘⇧3 | ⌘⌃⇧3 | | ⌘⌃⇧3 | BTX!| RST |  0  |  .  |  /  |  ⇧  |
 //                   |  ⌃  |  ⌥  |  ⌘  |      |  |      |  ⌘  |  ⌥  |  ⌃  |
 //
 // HRM (at the H key) is &tog 1 — flips the home row mods on and off.
+// MOU (at the 6 key) is &tog 4 — the mouse layer. Same key exits.
+//
+// The five slots that used to be &trans here fell through to nothing, so they
+// were free: BOOT is &bootloader, in the top-right corner where it is hardest
+// to hit by accident — it ends the double-tap-reset-on-both-halves dance every
+// flash. OUT is &out OUT_TOG, the USB/BLE selector this board never had; it
+// matters when plugged in to charge and ZMK picks the wrong endpoint. BTX! is
+// BT_CLR_ALL, needed after any change to the HID report descriptor. RST is
+// &sys_reset.
+//
+// [23] and [35] are still &trans ON PURPOSE: they fall through to
+// &lt_key FN MINUS and &lt_key NAV RET, so Dash and Enter keep working here.
 //
 // The BT row is NOT in the v14 sheet; it is carried over from the previous
 // keymap. Without it there is no way to pick or clear a Bluetooth profile,
@@ -295,11 +369,65 @@
 // the macOS equivalents: region→file, full→file, and full→clipboard on the
 // inner keys.
             bindings = <
-&bt BT_SEL 0 &kp F1       &kp F2       &kp F3      &kp F4        &kp F5                             &trans  &kp N7 &kp N8 &kp N9 &kp PLUS     &trans
-&bt BT_SEL 1 &kp F6       &kp F7       &kp F8      &kp F9        &kp F10                            &trans  &kp N4 &kp N5 &kp N6 &kp MINUS    &trans
-&bt BT_SEL 2 &kp F11      &kp F12      &kp F13     &kp F14       &kp F15                            &tog HRM &kp N1 &kp N2 &kp N3 &kp ASTERISK &trans
-&kp LSHFT    &bt BT_SEL 3 &bt BT_SEL 4 &bt BT_CLR  &kp SNIP_FILE &kp SHOT_FILE &kp SHOT_CLIP   &kp SHOT_CLIP &trans &trans &kp N0 &kp DOT &kp SLASH &kp RSHFT
+&bt BT_SEL 0 &kp F1       &kp F2       &kp F3      &kp F4        &kp F5                             &tog MOU     &kp N7 &kp N8 &kp N9 &kp PLUS     &bootloader
+&bt BT_SEL 1 &kp F6       &kp F7       &kp F8      &kp F9        &kp F10                            &out OUT_TOG &kp N4 &kp N5 &kp N6 &kp MINUS    &trans
+&bt BT_SEL 2 &kp F11      &kp F12      &kp F13     &kp F14       &kp F15                            &tog HRM     &kp N1 &kp N2 &kp N3 &kp ASTERISK &trans
+&kp LSHFT    &bt BT_SEL 3 &bt BT_SEL 4 &bt BT_CLR  &kp SNIP_FILE &kp SHOT_FILE &kp SHOT_CLIP   &kp SHOT_CLIP &bt BT_CLR_ALL &sys_reset &kp N0 &kp DOT &kp SLASH &kp RSHFT
                                        &kp LCTRL   &kp LALT      &kp LGUI      &trans          &trans  &kp LGUI &kp LALT &kp LCTRL
+            >;
+        };
+
+        mouse_layer {
+// |     |     |     |      |      |     |             | MOU |     |     |     |     |     |
+// |     |     |     |SCRL↑ |      |     |             |     | BACK|  ↑  | FWD |     |     |
+// | ENT |     |SCRL← |SCRL↓ |SCRL→ |     |            |     |  ←  |  ↓  |  →  |     | ENT |
+// |  ⇧  |     |     |      |      |     |     |  |     |     |     |     |     |     |  ⇧  |
+//                   |  ⌃  |  ⌥  |  ⌘  | SNIPE |  | LCLK| RCLK| MCLK|  ⌃  |
+//
+// Toggled with &tog MOU — on fn at [6], or the O+L combo. The SAME key or
+// combo exits. &tog, NOT &to DEF: &to would also clear the hrm layer if you
+// happened to have home row mods toggled on.
+//
+// The cursor is on I/J/K/L, the exact inverted-T the nav layer already uses for
+// arrows, so the muscle memory transfers with nothing to relearn. Clicks are on
+// the RIGHT thumb, same hand as the cursor — the physical mouse metaphor.
+// Scroll is mirrored on the LEFT hand at E/S/D/F: this layer is toggled rather
+// than held, so the other hand is free and you can scroll and move at once.
+//
+// The modifiers at [24] [36] [49] [50] [51] [52] [57] are &trans, and that is
+// LOAD-BEARING: ⌘-click, ⇧-click, ⌃-click and ⌥-drag are not optional on macOS,
+// so LGUI/LSHFT/LCTRL/LALT have to survive into this layer. ⌘ specifically
+// lives on the LEFT thumb here, since the right thumb is all buttons now.
+//
+// Everything else is &none, not &trans. On a toggled layer &trans would let a
+// stray finger type letters mid-drag; &none makes the board inert apart from
+// the cursor cluster and the modifiers.
+            bindings = <
+&none  &none  &none          &none           &none            &none                                       &tog MOU &none          &none           &none            &none  &none
+&none  &none  &none          &msc SCRL_UP    &none            &none                                       &none    &mkp MB4       &mmv MOVE_UP    &mkp MB5         &none  &trans
+&trans &none  &msc SCRL_LEFT &msc SCRL_DOWN  &msc SCRL_RIGHT  &none                                       &none    &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none  &trans
+&trans &none  &none          &none           &none            &none  &none                         &none  &none    &none          &none           &none            &none  &trans
+                                             &trans &trans &trans &mo SNIPE            &mkp LCLK &mkp RCLK &mkp MCLK &trans
+            >;
+        };
+
+        sniper_layer {
+// Held from the left inner thumb while mou is active. Same four cursor keys at
+// roughly a third velocity, for pixel work.
+//
+// This IS the DPI-shift key. Mouse emulation has no sensor and no runtime
+// sensitivity setting — MOVE_UP and friends expand to +/-600 via
+// ZMK_POINTING_DEFAULT_MOVE_VAL, and a second layer carrying explicit
+// MOVE_X()/MOVE_Y() values is the only way to change speed without a reflash.
+//
+// Everything else is &trans and falls through to mou, so the clicks, the scroll
+// cluster and the modifiers all stay live while sniping.
+            bindings = <
+&trans &trans &trans &trans &trans &trans                       &trans &trans            &trans            &trans           &trans &trans
+&trans &trans &trans &trans &trans &trans                       &trans &trans            &mmv MOVE_Y(-200) &trans           &trans &trans
+&trans &trans &trans &trans &trans &trans                       &trans &mmv MOVE_X(-200) &mmv MOVE_Y(200)  &mmv MOVE_X(200) &trans &trans
+&trans &trans &trans &trans &trans &trans &trans         &trans &trans &trans            &trans            &trans           &trans &trans
+                            &trans &trans &trans &trans         &trans &trans &trans &trans
             >;
         };
     };
